@@ -35,7 +35,7 @@ export function Header() {
       )}
 
       <div className="max-xl:hidden">
-        <h1 className="Welcome mb-0.5 text-2xl font-bold text-[#6E51E0]">
+        <h1 className="Welcome mb-0.5 text-2xl font-bold text-primary">
           Welcome
         </h1>
         <p className="font-medium">Md Shakil</p>

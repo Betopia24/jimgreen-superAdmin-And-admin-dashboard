@@ -1,16 +1,15 @@
-import logoThree from "@/assets/logos/mainLogo.png";
+import logoThree from "@/assets/logos/AdvisorLogo.png";
 import Image from "next/image";
 
 export function Logo() {
   return (
-    <div className="relative h-12 max-w-[10.847rem]">
+    <div className="relative h-26 max-w-[20.847rem]">
       <Image
         src={logoThree}
         fill
         // className="dark:hidden"
         alt="NextAdmin logo"
         role="presentation"
-        quality={100}
       />
 
       <Image
@@ -19,7 +18,6 @@ export function Logo() {
         // className="hidden dark:block"
         alt="NextAdmin logo"
         role="presentation"
-        quality={100}
       />
     </div>
   );

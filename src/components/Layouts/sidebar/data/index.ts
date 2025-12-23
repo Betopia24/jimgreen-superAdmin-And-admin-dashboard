@@ -1,6 +1,13 @@
 import * as Icons from "../icons";
 import type { NavSection } from "./types";
-import { LayoutDashboard, Users, CreditCard, Bell, Settings } from "../icons";
+import {
+  LayoutDashboard,
+  Users,
+  CreditCard,
+  Bell,
+  Settings,
+  Building2,
+} from "../icons";
 
 export const NAV_DATA: NavSection[] = [
   {
@@ -25,8 +32,8 @@ export const NAV_DATA: NavSection[] = [
         items: [],
       },
       {
-        title: "Notifications",
-        icon: Icons.Bell,
+        title: "Company Management",
+        icon: Icons.Building2,
         url: "/notification",
         items: [],
       },

@@ -170,4 +170,5 @@ export {
   CreditCard,
   Bell,
   Settings,
+  Building2,
 } from "lucide-react";
