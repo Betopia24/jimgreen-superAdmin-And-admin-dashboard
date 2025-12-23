@@ -120,10 +120,10 @@ const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
           {/* Created Date */}
           <div className="rounded-xl bg-white p-4 shadow-sm sm:rounded-2xl sm:p-6">
             <div className="mb-2 flex items-center gap-3">
-              <div className="flex-shrink-0 rounded-lg bg-indigo-50 p-2">
-                <Calendar className="h-4 w-4 text-indigo-600 sm:h-5 sm:w-5" />
+              <div className="flex-shrink-0 rounded-lg bg-blue-50 p-2">
+                <Calendar className="h-4 w-4 text-primary sm:h-5 sm:w-5" />
               </div>
-              <span className="text-xs font-medium text-gray-500 sm:text-sm">
+              <span className="text-xs font-medium text-primary sm:text-sm">
                 Created Date
               </span>
             </div>
@@ -135,14 +135,14 @@ const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
           {/* Last Active */}
           <div className="rounded-xl bg-white p-4 shadow-sm sm:rounded-2xl sm:p-6">
             <div className="mb-2 flex items-center gap-3">
-              <div className="flex-shrink-0 rounded-lg bg-indigo-50 p-2">
-                <Clock className="h-4 w-4 text-indigo-600 sm:h-5 sm:w-5" />
+              <div className="flex-shrink-0 rounded-lg bg-blue-50 p-2">
+                <Clock className="h-4 w-4 text-primary sm:h-5 sm:w-5" />
               </div>
               <span className="text-xs font-medium text-gray-500 sm:text-sm">
                 Last Active
               </span>
             </div>
-            <p className="ml-10 text-lg font-semibold text-indigo-600 sm:ml-11 sm:text-2xl">
+            <p className="ml-10 text-lg font-semibold text-primary sm:ml-11 sm:text-2xl">
               {userData.lastActive}
             </p>
           </div>
@@ -151,13 +151,13 @@ const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
           <div className="rounded-xl bg-white p-4 shadow-sm sm:rounded-2xl sm:p-6">
             <div className="mb-2 flex items-center gap-3">
               <div className="flex-shrink-0 rounded-lg bg-blue-50 p-2">
-                <CreditCard className="h-4 w-4 text-blue-600 sm:h-5 sm:w-5" />
+                <CreditCard className="h-4 w-4 text-primary sm:h-5 sm:w-5" />
               </div>
               <span className="text-xs font-medium text-gray-500 sm:text-sm">
                 Subscription
               </span>
             </div>
-            <p className="ml-10 text-lg font-semibold text-blue-600 sm:ml-11 sm:text-2xl">
+            <p className="ml-10 text-lg font-semibold text-primary sm:ml-11 sm:text-2xl">
               {userData.subscription}
             </p>
           </div>
