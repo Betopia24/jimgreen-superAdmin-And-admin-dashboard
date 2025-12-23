@@ -267,7 +267,7 @@ const CompanyManagement: React.FC = () => {
                     </td>
                     <td className="whitespace-nowrap px-6 py-4">
                       <span
-                        className={`text-gray-900trounded-md px-3 py-2 text-xs font-semibold`}
+                        className={`trounded-md px-3 py-2 text-xs font-semibold text-gray-900`}
                       >
                         {user.subscription}
                       </span>
@@ -302,7 +302,7 @@ const CompanyManagement: React.FC = () => {
                           <div className="absolute right-0 z-10 mt-2 w-48 rounded-lg border border-gray-200 bg-white shadow-lg">
                             <div className="py-2">
                               <Link
-                                href={"/user-management/details"}
+                                href={"/company-management/details"}
                                 className="flex w-full items-center gap-2 px-4 py-2 text-left transition-colors hover:bg-gray-50"
                               >
                                 <User className="h-4 w-4" />

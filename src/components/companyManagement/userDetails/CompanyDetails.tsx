@@ -11,28 +11,28 @@ import {
 
 interface UserProfileProps {
   user?: {
-    name: string;
+    companyName: string;
     email: string;
     phone: string;
     location: string;
     avatar: string;
     createdDate: string;
-    lastActive: string;
+    users: number;
     subscription: string;
     status: "active" | "inactive" | "suspended";
   };
 }
 
-const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
+const CompanyDetails: React.FC<UserProfileProps> = ({ user }) => {
   const defaultUser = {
-    name: "Lebron James",
-    email: "Lebronjames003@gmail.com",
+    companyName: "TechCorp Industries",
+    email: "TechCorp@gmail.com",
     phone: "+8801638148194",
     location: "California, USA",
     avatar:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop",
+      "https://img.freepik.com/premium-vector/creative-elegant-abstract-minimalistic-logo-design-vector-any-brand-company_1253202-136451.jpg?semt=ais_hybrid&w=740&q=80",
     createdDate: "Jan 15, 2024",
-    lastActive: "2 min ago",
+    users: 2343,
     subscription: "Enterprise",
     status: "active" as const,
   };
@@ -58,7 +58,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
               <div className="relative flex-shrink-0">
                 <img
                   src={userData.avatar}
-                  alt={userData.name}
+                  alt={userData.companyName}
                   className="h-28 w-28 rounded-full border-4 border-gray-100 object-cover sm:h-32 sm:w-32 lg:h-40 lg:w-40"
                 />
                 <div
@@ -73,7 +73,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
               {/* User Info */}
               <div className="w-full space-y-3 text-center sm:w-auto sm:text-left">
                 <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">
-                  {userData.name}
+                  {userData.companyName}
                 </h1>
 
                 <div className="space-y-2">
@@ -121,13 +121,13 @@ const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
           <div className="rounded-xl bg-white p-4 shadow-sm sm:rounded-2xl sm:p-6">
             <div className="mb-2 flex items-center gap-3">
               <div className="flex-shrink-0 rounded-lg bg-indigo-50 p-2">
-                <Calendar className="h-4 w-4 text-indigo-600 sm:h-5 sm:w-5" />
+                <Calendar className="h-4 w-4 text-primary sm:h-5 sm:w-5" />
               </div>
               <span className="text-xs font-medium text-gray-500 sm:text-sm">
                 Created Date
               </span>
             </div>
-            <p className="ml-10 text-lg font-semibold text-indigo-600 sm:ml-11 sm:text-2xl">
+            <p className="ml-10 text-lg font-semibold text-primary sm:ml-11 sm:text-2xl">
               {userData.createdDate}
             </p>
           </div>
@@ -136,14 +136,14 @@ const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
           <div className="rounded-xl bg-white p-4 shadow-sm sm:rounded-2xl sm:p-6">
             <div className="mb-2 flex items-center gap-3">
               <div className="flex-shrink-0 rounded-lg bg-indigo-50 p-2">
-                <Clock className="h-4 w-4 text-indigo-600 sm:h-5 sm:w-5" />
+                <Clock className="h-4 w-4 text-primary sm:h-5 sm:w-5" />
               </div>
               <span className="text-xs font-medium text-gray-500 sm:text-sm">
-                Last Active
+                Active User
               </span>
             </div>
-            <p className="ml-10 text-lg font-semibold text-indigo-600 sm:ml-11 sm:text-2xl">
-              {userData.lastActive}
+            <p className="ml-10 text-lg font-semibold text-primary sm:ml-11 sm:text-2xl">
+              {userData.users}
             </p>
           </div>
 
@@ -151,13 +151,13 @@ const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
           <div className="rounded-xl bg-white p-4 shadow-sm sm:rounded-2xl sm:p-6">
             <div className="mb-2 flex items-center gap-3">
               <div className="flex-shrink-0 rounded-lg bg-blue-50 p-2">
-                <CreditCard className="h-4 w-4 text-blue-600 sm:h-5 sm:w-5" />
+                <CreditCard className="h-4 w-4 text-primary sm:h-5 sm:w-5" />
               </div>
               <span className="text-xs font-medium text-gray-500 sm:text-sm">
                 Subscription
               </span>
             </div>
-            <p className="ml-10 text-lg font-semibold text-blue-600 sm:ml-11 sm:text-2xl">
+            <p className="ml-10 text-lg font-semibold text-primary sm:ml-11 sm:text-2xl">
               {userData.subscription}
             </p>
           </div>
@@ -182,4 +182,4 @@ const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
   );
 };
 
-export default UserProfile;
+export default CompanyDetails;
