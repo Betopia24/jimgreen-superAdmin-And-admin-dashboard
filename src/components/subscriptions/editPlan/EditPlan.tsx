@@ -116,7 +116,7 @@ export default function EidtPlan() {
                 <button
                   onClick={() => handleInputChange("status", !planData.status)}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                    planData.status ? "bg-indigo-600" : "bg-gray-300"
+                    planData.status ? "bg-primary" : "bg-gray-300"
                   }`}
                   aria-label="Toggle status"
                 >
@@ -264,7 +264,7 @@ export default function EidtPlan() {
                   onClick={() => handleFeatureToggle(feature.key)}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                     planData.features[feature.key]
-                      ? "bg-indigo-600"
+                      ? "bg-primary"
                       : "bg-gray-300"
                   }`}
                   aria-label={`Toggle ${feature.label}`}
@@ -308,7 +308,7 @@ export default function EidtPlan() {
             <button className="rounded-md bg-gray-50 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-300">
               Cancel
             </button>
-            <button className="rounded-md bg-indigo-600 px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-700">
+            <button className="rounded-md bg-primary px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-700">
               Save Changes
             </button>
           </div>
