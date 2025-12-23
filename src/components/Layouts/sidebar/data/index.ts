@@ -26,17 +26,18 @@ export const NAV_DATA: NavSection[] = [
         items: [],
       },
       {
+        title: "Company Management",
+        icon: Icons.Building2,
+        url: "/company-management",
+        items: [],
+      },
+      {
         title: "Subscriptions",
         url: "/subscriptions",
         icon: Icons.CreditCard,
         items: [],
       },
-      {
-        title: "Company Management",
-        icon: Icons.Building2,
-        url: "/notification",
-        items: [],
-      },
+
       {
         title: "Settings",
         icon: Icons.Settings,
