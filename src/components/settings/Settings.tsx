@@ -32,8 +32,8 @@ const SettingsPage: React.FC = () => {
   const [weeklyReports, setWeeklyReports] = useState(true);
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="mx-auto max-w-6xl">
+    <div className="">
+      <div className="">
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
           <div>
