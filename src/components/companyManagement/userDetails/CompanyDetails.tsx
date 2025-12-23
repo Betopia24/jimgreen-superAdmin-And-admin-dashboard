@@ -59,7 +59,7 @@ const CompanyDetails: React.FC<UserProfileProps> = ({ user }) => {
                 <img
                   src={userData.avatar}
                   alt={userData.companyName}
-                  className="h-28 w-28 rounded-full border-4 border-gray-100 object-cover sm:h-32 sm:w-32 lg:h-40 lg:w-40"
+                  className="h-28 w-28 rounded-full border-2 border-blue-100 object-cover sm:h-32 sm:w-32 lg:h-40 lg:w-40"
                 />
                 <div
                   className={`absolute bottom-1 right-1 h-4 w-4 rounded-full border-2 border-white sm:bottom-2 sm:right-2 sm:h-5 sm:w-5 sm:border-4 ${
@@ -120,7 +120,7 @@ const CompanyDetails: React.FC<UserProfileProps> = ({ user }) => {
           {/* Created Date */}
           <div className="rounded-xl bg-white p-4 shadow-sm sm:rounded-2xl sm:p-6">
             <div className="mb-2 flex items-center gap-3">
-              <div className="flex-shrink-0 rounded-lg bg-indigo-50 p-2">
+              <div className="flex-shrink-0 rounded-lg bg-blue-50 p-2">
                 <Calendar className="h-4 w-4 text-primary sm:h-5 sm:w-5" />
               </div>
               <span className="text-xs font-medium text-gray-500 sm:text-sm">
@@ -135,7 +135,7 @@ const CompanyDetails: React.FC<UserProfileProps> = ({ user }) => {
           {/* Last Active */}
           <div className="rounded-xl bg-white p-4 shadow-sm sm:rounded-2xl sm:p-6">
             <div className="mb-2 flex items-center gap-3">
-              <div className="flex-shrink-0 rounded-lg bg-indigo-50 p-2">
+              <div className="flex-shrink-0 rounded-lg bg-blue-50 p-2">
                 <Clock className="h-4 w-4 text-primary sm:h-5 sm:w-5" />
               </div>
               <span className="text-xs font-medium text-gray-500 sm:text-sm">
