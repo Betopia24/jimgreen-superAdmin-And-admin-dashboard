@@ -137,7 +137,7 @@ const RevenueGrowthChart: React.FC = () => {
           {/* Header */}
           <div className="mb-8">
             <h1 className="text-xl font-bold text-gray-800 sm:text-2xl">
-              Revenue Growth
+              Subscription Growth
             </h1>
             <p className="mt-2 text-sm text-gray-500 sm:text-base">
               Track your business performance over time
@@ -155,8 +155,8 @@ const RevenueGrowthChart: React.FC = () => {
               >
                 <defs>
                   <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0.05} />
+                    <stop offset="5%" stopColor="#004AAD" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#004AAD" stopOpacity={0.05} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid
@@ -182,17 +182,17 @@ const RevenueGrowthChart: React.FC = () => {
                 />
                 <Tooltip
                   content={<CustomTooltip />}
-                  cursor={{ stroke: "#8b5cf6", strokeWidth: 2 }}
+                  cursor={{ stroke: "#004AAD", strokeWidth: 2 }}
                 />
                 <Area
                   type="monotone"
                   dataKey="revenue"
-                  stroke="#8b5cf6"
+                  stroke="#004AAD"
                   strokeWidth={3}
                   fill="url(#colorRevenue)"
                   activeDot={{
                     r: 6,
-                    fill: "#8b5cf6",
+                    fill: "#004AAD",
                     stroke: "#fff",
                     strokeWidth: 3,
                   }}
