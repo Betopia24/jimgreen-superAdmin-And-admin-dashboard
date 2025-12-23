@@ -2,14 +2,6 @@ import React from "react";
 import { TrendingUp, TrendingDown, Users } from "lucide-react";
 import Link from "next/link";
 
-interface Metric {
-  icon: React.ReactNode;
-  label: string;
-  value: string;
-  change: string;
-  positive: boolean;
-}
-
 interface Plan {
   name: string;
   highlighted: boolean;
@@ -26,30 +18,6 @@ interface Distribution {
 }
 
 const SubscriptionPlan: React.FC = () => {
-  const metrics: Metric[] = [
-    {
-      icon: <TrendingUp className="h-7 w-7 text-green-500" />,
-      label: "Monthly Recurring Revenue",
-      value: "12,458",
-      change: "+12.5% from last month",
-      positive: true,
-    },
-    {
-      icon: <TrendingDown className="h-7 w-7 text-red-500" />,
-      label: "Churn Rate",
-      value: "8,234",
-      change: "+8.2% from last month",
-      positive: false,
-    },
-    {
-      icon: <Users className="h-7 w-7 text-blue-500" />,
-      label: "Active Subscriptions",
-      value: "3200",
-      change: "+2.4% from last month",
-      positive: true,
-    },
-  ];
-
   const plans: Plan[] = [
     {
       name: "Basic",
@@ -99,8 +67,8 @@ const SubscriptionPlan: React.FC = () => {
 
   const distribution: Distribution[] = [
     { plan: "Free", users: 4224, percentage: 34, color: "bg-gray-400" },
-    { plan: "Pro", users: 5834, percentage: 47, color: "bg-indigo-600" },
-    { plan: "Enterprise", users: 2400, percentage: 19, color: "bg-indigo-900" },
+    { plan: "Pro", users: 5834, percentage: 47, color: "bg-primary" },
+    { plan: "Enterprise", users: 2400, percentage: 19, color: "bg-green-600" },
   ];
 
   return (
@@ -118,52 +86,28 @@ const SubscriptionPlan: React.FC = () => {
           </div>
           <Link
             href={`/subscriptions/add-plan`}
-            className="rounded-lg bg-indigo-600 px-6 py-2.5 font-medium text-white transition hover:bg-indigo-700"
+            className="rounded-lg bg-primary px-6 py-2.5 font-medium text-white transition hover:bg-blue-900"
           >
             Add New Plan
           </Link>
         </div>
 
-        {/* Metrics Cards */}
-        <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-3">
-          {metrics.map((metric: Metric, index: number) => (
-            <div key={index} className="rounded-lg bg-white p-6 shadow-sm">
-              <div className="mb-3 flex items-center gap-2 text-2xl">
-                {metric.icon}
-              </div>
-              <p className="mb-2 text-sm text-gray-600">{metric.label}</p>
-              <p className="mb-2 text-2xl font-bold text-gray-900">
-                {metric.value}
-              </p>
-              <p
-                className={`text-sm ${metric.positive ? "text-green-600" : "text-red-600"}`}
-              >
-                {metric.change}
-              </p>
-            </div>
-          ))}
-        </div>
-
         {/* Subscription Plans */}
         <div className="mb-8">
-          <h2 className="mb-6 text-xl font-bold text-gray-900">
-            Subscription Management
-          </h2>
-
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {plans.map((plan: Plan, index: number) => (
               <div
                 key={index}
                 className={`flex h-full flex-col rounded-lg bg-white p-6 shadow-sm ${
-                  plan.highlighted ? "ring-2 ring-indigo-600" : ""
+                  plan.highlighted ? "ring-primbg-primary ring-2" : ""
                 }`}
               >
                 <div className="mb-4 rounded-xl bg-gray-2 p-4">
                   <div
                     className={`mb-4 inline-block rounded-full px-4 py-1 text-sm font-medium ${
                       plan.highlighted
-                        ? "bg-indigo-600 text-white"
-                        : "text- bg-white text-indigo-700"
+                        ? "bg-primary text-white"
+                        : "bg-white text-primary"
                     }`}
                   >
                     {plan.name}
@@ -217,7 +161,7 @@ const SubscriptionPlan: React.FC = () => {
                 {/* Bottom Button */}
                 <Link
                   href={`/subscriptions/edit-plan`}
-                  className="bg-[rgba(255, 255, 255, 0.20)] mt-auto flex w-full items-center justify-center gap-3 rounded-full border py-2 text-sm font-medium text-gray-700 transition hover:bg-indigo-600 hover:text-white"
+                  className="bg-[rgba(255, 255, 255, 0.20)] mt-auto flex w-full items-center justify-center gap-3 rounded-full border py-2 text-sm font-medium text-gray-700 transition hover:bg-primary hover:text-white"
                 >
                   Edit Plan
                   <svg
