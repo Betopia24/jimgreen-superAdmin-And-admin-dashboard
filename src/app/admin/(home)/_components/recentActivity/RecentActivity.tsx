@@ -1,3 +1,4 @@
+import { CircleCheckBig, Users } from "lucide-react";
 import React from "react";
 
 interface Activity {
@@ -75,12 +76,17 @@ const RecentActivity: React.FC = () => {
                   {/* Left side: Avatar + Info */}
                   <div className="flex min-w-0 flex-1 items-center gap-3 sm:gap-4">
                     {/* Avatar */}
-                    <div
+                    {/* <div
                       className={`${activity.bgColor} flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-sm font-semibold text-white shadow-md sm:h-12 sm:w-12 sm:text-base`}
                     >
                       {activity.avatar}
-                    </div>
+                    </div> */}
 
+                    <div
+                      className={`mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-green-100`}
+                    >
+                      <CircleCheckBig className="h-6 w-6 text-green-700" />
+                    </div>
                     {/* Name and Action */}
                     <div className="min-w-0 flex-1">
                       <h3 className="truncate text-sm font-semibold text-gray-900 sm:text-base">
