@@ -198,7 +198,7 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { NAV_DATA } from "./data";
+import { NAV_DATA_SUPER_ADMIN, NAV_DATA_ADMIN } from "./data";
 import { ArrowLeftIcon, ChevronUp } from "./icons";
 import { LogOut as LogOutIcon } from "lucide-react";
 import { MenuItem } from "./menu-item";
@@ -223,6 +223,15 @@ export function Sidebar() {
       prev.includes(title) ? prev.filter((t) => t !== title) : [...prev, title],
     );
   };
+
+  const role = true;
+
+  let NAV_DATA = [];
+  if (role) {
+    NAV_DATA = NAV_DATA_ADMIN;
+  } else {
+    NAV_DATA = NAV_DATA_SUPER_ADMIN;
+  }
 
   /** ⭐ Auto-expand if child matches */
   useEffect(() => {
