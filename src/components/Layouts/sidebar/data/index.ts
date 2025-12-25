@@ -21,7 +21,7 @@ export const NAV_DATA_ADMIN: NavSection[] = [
       },
       {
         title: "Team Management",
-        url: "/user-management",
+        url: "/admin/team-management",
         icon: Icons.Users,
         items: [],
       },
