@@ -29,7 +29,7 @@ export const NAV_DATA_ADMIN: NavSection[] = [
 
       {
         title: "Subscriptions",
-        url: "/subscriptions",
+        url: "/admin/subscriptions",
         icon: Icons.CreditCard,
         items: [],
       },
@@ -37,14 +37,14 @@ export const NAV_DATA_ADMIN: NavSection[] = [
       {
         title: "Reports Analytics",
         icon: Icons.ChartLineIcon,
-        url: "/company-management",
+        url: "/admin/reports-Analytics",
         items: [],
       },
 
       {
         title: "Settings",
         icon: Icons.Settings,
-        url: "/settings",
+        url: "/admin/settings",
         items: [],
       },
     ],
