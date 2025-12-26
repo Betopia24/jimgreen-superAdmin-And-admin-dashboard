@@ -92,7 +92,7 @@ const ReportsAnalytics: React.FC = () => {
 
   return (
     <div className="">
-      <div className="mx-auto max-w-7xl">
+      <div className="">
         {/* Stats Grid */}
         <div className="mb-6 grid grid-cols-1 gap-4 sm:mb-8 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
           <StatCard

@@ -1,4 +1,4 @@
-import ReportsAnalytics from "@/components/adminComponent/ReportsAnalytics/ReportsAnalytics";
+import ReportsAnalytics from "@/components/adminComponent/ReportsAnalytics/ReportsAnalytic";
 import React from "react";
 
 const page = () => {
