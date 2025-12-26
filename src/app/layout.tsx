@@ -15,7 +15,7 @@ import { Providers } from "./providers";
 export const metadata: Metadata = {
   title: {
     template: "JimGreen admin Dashboard And Super Admin",
-    default: "NextAdmin - Next.js Dashboard Kit",
+    default: "JimGreen admin Dashboard And Super Admin",
   },
   description:
     " JimGreen UI components, and integrations for fast dashboard development.",

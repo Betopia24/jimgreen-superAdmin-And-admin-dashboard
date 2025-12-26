@@ -234,7 +234,14 @@ export function Sidebar() {
   const role = true;
 
   let NAV_DATA = [];
-  if (role) {
+  if (
+    pathname === "/admin" ||
+    pathname === "/admin/team-management" ||
+    pathname === "/admin/subscriptions" ||
+    pathname === "/admin/reports-Analytics" ||
+    pathname === "/admin/reports-Analytics/report-details" ||
+    pathname === "/admin/settings"
+  ) {
     NAV_DATA = NAV_DATA_ADMIN;
   } else {
     NAV_DATA = NAV_DATA_SUPER_ADMIN;
