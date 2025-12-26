@@ -12,13 +12,33 @@ import NextTopLoader from "nextjs-toploader";
 import type { PropsWithChildren } from "react";
 import { Providers } from "./providers";
 
+// export const metadata: Metadata = {
+//   title: {
+//     template: "JimGreen admin Dashboard And Super Admin",
+//     default: "JimGreen admin Dashboard And Super Admin",
+//   },
+//   description:
+//     " JimGreen UI components, and integrations for fast dashboard development.",
+// };
+
 export const metadata: Metadata = {
-  title: {
-    template: "JimGreen admin Dashboard And Super Admin",
-    default: "JimGreen admin Dashboard And Super Admin",
+  title: "GIMGreen Dashboard",
+  description: "GIMGreen Admin Dashboard System",
+  openGraph: {
+    title: "GIMGreen Dashboard",
+    description: "Modern Admin Dashboard for GIMGreen",
+    url: "https://gimgreen-dashboard.vercel.app",
+    siteName: "GIMGreen",
+    images: [
+      {
+        url: "https://gimgreen-dashboard.vercel.app/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "GIMGreen Dashboard",
+      },
+    ],
+    type: "website",
   },
-  description:
-    " JimGreen UI components, and integrations for fast dashboard development.",
 };
 
 export default function RootLayout({ children }: PropsWithChildren) {
