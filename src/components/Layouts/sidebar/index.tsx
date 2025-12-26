@@ -215,6 +215,13 @@ export function Sidebar() {
   /** ⭐ Correct nested URL detection */
   const isActiveUrl = (url?: string): boolean => {
     if (!url) return false;
+
+    // Dashboard exact match only
+    if (url === "/admin") {
+      return pathname === "/admin";
+    }
+
+    // Other routes (nested)
     return pathname === url || pathname.startsWith(url + "/");
   };
 

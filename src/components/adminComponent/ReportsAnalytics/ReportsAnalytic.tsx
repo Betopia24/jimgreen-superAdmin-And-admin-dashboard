@@ -10,6 +10,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import Link from "next/link";
 
 interface StatCardProps {
   title: string;
@@ -275,9 +276,12 @@ const ReportsAnalytics: React.FC = () => {
                       </span>
                     </td>
                     <td className="whitespace-nowrap px-6 py-4">
-                      <button className="text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline">
+                      <Link
+                        href={"/admin/reports-Analytics/report-details"}
+                        className="text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline"
+                      >
                         View Details
-                      </button>
+                      </Link>
                     </td>
                   </tr>
                 ))}
