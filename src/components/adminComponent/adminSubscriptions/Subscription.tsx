@@ -1,6 +1,5 @@
+"use clinet";
 import React from "react";
-import { TrendingUp, TrendingDown, Users } from "lucide-react";
-import Link from "next/link";
 
 interface Plan {
   name: string;

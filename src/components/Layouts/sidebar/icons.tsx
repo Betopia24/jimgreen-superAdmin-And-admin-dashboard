@@ -171,4 +171,5 @@ export {
   Bell,
   Settings,
   Building2,
+  ChartLineIcon,
 } from "lucide-react";

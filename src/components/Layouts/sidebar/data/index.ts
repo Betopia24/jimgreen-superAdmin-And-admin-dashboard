@@ -7,6 +7,7 @@ import {
   Bell,
   Settings,
   Building2,
+  ChartLineIcon,
 } from "../icons";
 
 export const NAV_DATA_ADMIN: NavSection[] = [
@@ -35,7 +36,7 @@ export const NAV_DATA_ADMIN: NavSection[] = [
 
       {
         title: "Reports Analytics",
-        icon: Icons.Building2,
+        icon: Icons.ChartLineIcon,
         url: "/company-management",
         items: [],
       },
