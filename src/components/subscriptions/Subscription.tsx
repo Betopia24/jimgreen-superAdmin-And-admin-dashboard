@@ -98,9 +98,7 @@ const SubscriptionPlan: React.FC = () => {
             {plans.map((plan: Plan, index: number) => (
               <div
                 key={index}
-                className={`flex h-full flex-col rounded-lg bg-white p-6 shadow-sm ${
-                  plan.highlighted ? "ring-primbg-primary ring-2" : ""
-                }`}
+                className={`flex h-full flex-col rounded-lg bg-white p-6 shadow-sm`}
               >
                 <div className="mb-4 rounded-xl bg-gray-2 p-4">
                   <div
