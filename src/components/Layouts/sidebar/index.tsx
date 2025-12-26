@@ -192,7 +192,6 @@
 // }
 
 "use client";
-
 import { Logo } from "@/components/logo";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
@@ -262,7 +261,7 @@ export function Sidebar() {
 
   const handleLogout = () => {
     if (isMobile) toggleSidebar();
-    router.push("/auth/login");
+    // router.push("/");
   };
 
   return (
