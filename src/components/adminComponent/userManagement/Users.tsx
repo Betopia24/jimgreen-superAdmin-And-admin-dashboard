@@ -9,8 +9,11 @@ import {
   Calendar,
   Clock,
   Shield,
+  Trash2,
+  Plus,
 } from "lucide-react";
 import Link from "next/link";
+import DeactivateModal from "./Modal";
 
 interface User {
   id: number;
@@ -25,13 +28,14 @@ interface User {
 type FilterStatus = "All" | "Active" | "Inactive" | "Suspended";
 
 const TeamManagement: React.FC = () => {
+  const [open, setOpen] = useState(false);
   const [users, setUsers] = useState<User[]>([
     {
       id: 1,
       name: "Dianne Russell",
       email: "felicia.reid@example.com",
       subscription: "Enterprise",
-      createdDate: "Jan 16, 2024",
+      createdDate: "23",
       lastActive: "2 min ago",
       status: "Active",
     },
@@ -40,7 +44,7 @@ const TeamManagement: React.FC = () => {
       name: "Albert Flores",
       email: "debra.holt@example.com",
       subscription: "Pro",
-      createdDate: "Feb 3, 2024",
+      createdDate: "312",
       lastActive: "2 min ago",
       status: "Active",
     },
@@ -49,7 +53,7 @@ const TeamManagement: React.FC = () => {
       name: "Darrell Steward",
       email: "tanya.hill@example.com",
       subscription: "Free",
-      createdDate: "Mar 12, 2024",
+      createdDate: "324",
       lastActive: "2 min ago",
       status: "Active",
     },
@@ -58,7 +62,7 @@ const TeamManagement: React.FC = () => {
       name: "Jacob Jones",
       email: "debra.holt@example.com",
       subscription: "Pro",
-      createdDate: "Jan 28, 2024",
+      createdDate: "23",
       lastActive: "2 min ago",
       status: "Inactive",
     },
@@ -67,7 +71,7 @@ const TeamManagement: React.FC = () => {
       name: "Floyd Miles",
       email: "felicia.reid@example.com",
       subscription: "Enterprise",
-      createdDate: "Apr 5, 2024",
+      createdDate: "23",
       lastActive: "2 min ago",
       status: "Active",
     },
@@ -76,7 +80,7 @@ const TeamManagement: React.FC = () => {
       name: "Kristin Watson",
       email: "sara.cruz@example.com",
       subscription: "Free",
-      createdDate: "May 20, 2024",
+      createdDate: "345",
       lastActive: "2 min ago",
       status: "Suspended",
     },
@@ -146,17 +150,31 @@ const TeamManagement: React.FC = () => {
     "Suspended",
   ];
 
+  const deactivateUser = () => {
+    console.log("User deactivated:", selectedUser);
+    setOpen(true);
+  };
+
   return (
     <div className="min-h-screen">
       <div className="">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="mb-2 text-3xl font-bold text-gray-900">
-            User Management
-          </h1>
-          <p className="text-gray-600">
-            Manage and monitor all users across your platform
-          </p>
+        <div className="flex justify-between">
+          <div className="mb-8">
+            <h1 className="mb-2 text-3xl font-bold text-gray-900">
+              User Management
+            </h1>
+            <p className="text-gray-600">
+              Manage and monitor all users across your platform
+            </p>
+          </div>
+          <div>
+            <button className="flex gap-2 rounded-md bg-primary px-8 py-3 text-lg font-medium text-white">
+              {" "}
+              <Plus />
+              Add User
+            </button>
+          </div>
         </div>
 
         {/* User Table */}
@@ -227,11 +245,9 @@ const TeamManagement: React.FC = () => {
                   <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
                     Email
                   </th>
+
                   <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
-                    Subscription
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
-                    Created Date
+                    Reports
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
                     Last Active
@@ -265,13 +281,7 @@ const TeamManagement: React.FC = () => {
                     <td className="whitespace-nowrap px-6 py-4 text-gray-600">
                       {user.email}
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      <span
-                        className={`rounded-md px-3 py-2 text-xs font-medium ${getSubscriptionColor(user.subscription)}`}
-                      >
-                        {user.subscription}
-                      </span>
-                    </td>
+
                     <td className="whitespace-nowrap px-6 py-4 text-gray-600">
                       {user.createdDate}
                     </td>
@@ -279,46 +289,17 @@ const TeamManagement: React.FC = () => {
                       {user.lastActive}
                     </td>
                     <td className="whitespace-nowrap px-6 py-4">
-                      <span
+                      <button
+                        onClick={deactivateUser}
                         className={`rounded-md px-3 py-2 text-xs font-medium ${getStatusColor(user.status)}`}
                       >
                         {user.status}
-                      </span>
+                      </button>
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      <div className="relative">
-                        <button
-                          onClick={() =>
-                            setActiveActionMenu(
-                              activeActionMenu === user.id ? null : user.id,
-                            )
-                          }
-                          className="rounded-lg p-2 transition-colors hover:bg-gray-100"
-                        >
-                          <MoreVertical className="h-5 w-5 text-gray-600" />
-                        </button>
-
-                        {activeActionMenu === user.id && (
-                          <div className="absolute right-0 z-10 mt-2 w-48 rounded-lg border border-gray-200 bg-white shadow-lg">
-                            <div className="py-2">
-                              <Link
-                                href={"/admin/team-management/team-details"}
-                                className="flex w-full items-center gap-2 px-4 py-2 text-left transition-colors hover:bg-gray-50"
-                              >
-                                <User className="h-4 w-4" />
-                                <span>View Details</span>
-                              </Link>
-                              <button
-                                onClick={() => handleSuspendUser(user.id)}
-                                className="flex w-full items-center gap-2 px-4 py-2 text-left text-red-600 transition-colors hover:bg-gray-50"
-                              >
-                                <Shield className="h-4 w-4" />
-                                <span>Suspend User</span>
-                              </button>
-                            </div>
-                          </div>
-                        )}
-                      </div>
+                    <td className="whitespace-nowrap px-6 py-4 text-center">
+                      <button>
+                        <Trash2 />
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -431,6 +412,11 @@ const TeamManagement: React.FC = () => {
           </div>
         )}
       </div>
+      <DeactivateModal
+        isOpen={open}
+        onClose={() => setOpen(false)}
+        onConfirm={deactivateUser}
+      />
     </div>
   );
 };
