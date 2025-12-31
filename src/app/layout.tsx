@@ -12,15 +12,6 @@ import NextTopLoader from "nextjs-toploader";
 import type { PropsWithChildren } from "react";
 import { Providers } from "./providers";
 
-// export const metadata: Metadata = {
-//   title: {
-//     template: "JimGreen admin Dashboard And Super Admin",
-//     default: "JimGreen admin Dashboard And Super Admin",
-//   },
-//   description:
-//     " JimGreen UI components, and integrations for fast dashboard development.",
-// };
-
 export const metadata: Metadata = {
   title: "GIMGreen Dashboard",
   description: "GIMGreen Admin Dashboard System",
