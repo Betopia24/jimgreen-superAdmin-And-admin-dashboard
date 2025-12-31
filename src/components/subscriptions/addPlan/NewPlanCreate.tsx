@@ -95,7 +95,7 @@ export default function NewPlan() {
             </h2>
           </div>
 
-          <div className="mb-4 grid grid-cols-2 gap-4">
+          <div className="gird-cols-1 mb-4 grid gap-4 md:grid-cols-2">
             <div>
               <label className="mb-2 block text-sm font-medium text-gray-700">
                 Plan Name
@@ -131,7 +131,7 @@ export default function NewPlan() {
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-700">
+            <label className="my-2 block text-sm font-medium text-gray-700">
               Description
             </label>
             <textarea
@@ -150,7 +150,7 @@ export default function NewPlan() {
             <h2 className="text-lg font-semibold text-gray-900">Pricing</h2>
           </div>
 
-          <div className="grid grid-cols-3 gap-4">
+          <div className="gird-cols-1 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <div>
               <label className="mb-2 block text-sm font-medium text-gray-700">
                 Monthly Price
@@ -209,7 +209,7 @@ export default function NewPlan() {
             </h2>
           </div>
 
-          <div className="mb-6 grid grid-cols-2 gap-4">
+          <div className="gird-cols-1 mb-6 grid gap-4 md:grid-cols-2">
             <div>
               <label className="mb-2 block text-sm font-medium text-gray-700">
                 Max Meetings per Month
@@ -283,8 +283,8 @@ export default function NewPlan() {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex items-center justify-end">
-          <div className="flex gap-3">
+        <div className="flex items-center justify-center lg:justify-end">
+          <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
             <button className="rounded-md bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200">
               Reset to Default
             </button>

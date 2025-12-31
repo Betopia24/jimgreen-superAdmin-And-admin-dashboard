@@ -95,7 +95,7 @@ export default function EidtPlan() {
             </h2>
           </div>
 
-          <div className="mb-4 grid grid-cols-2 gap-4">
+          <div className="gird-cols-1 grid gap-4 md:grid-cols-2">
             <div>
               <label className="mb-2 block text-sm font-medium text-gray-700">
                 Plan Name
@@ -131,7 +131,7 @@ export default function EidtPlan() {
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-700">
+            <label className="my-2 block text-sm font-medium text-gray-700">
               Description
             </label>
             <textarea
@@ -150,7 +150,7 @@ export default function EidtPlan() {
             <h2 className="text-lg font-semibold text-gray-900">Pricing</h2>
           </div>
 
-          <div className="grid grid-cols-3 gap-4">
+          <div className="gird-cols-1 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <div>
               <label className="mb-2 block text-sm font-medium text-gray-700">
                 Monthly Price
@@ -209,7 +209,7 @@ export default function EidtPlan() {
             </h2>
           </div>
 
-          <div className="mb-6 grid grid-cols-2 gap-4">
+          <div className="gird-cols-1 mb-6 grid gap-4 md:grid-cols-2">
             <div>
               <label className="mb-2 block text-sm font-medium text-gray-700">
                 Max Meetings per Month
@@ -283,8 +283,8 @@ export default function EidtPlan() {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex items-center justify-between">
-          <button className="flex items-center gap-2 rounded-md bg-red-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-600">
+        <div className="flex flex-col-reverse items-center justify-between sm:flex-row">
+          <button className="mt-2 flex w-full items-center justify-center gap-2 rounded-md bg-red-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-600 sm:mb-0 sm:w-auto">
             <svg
               className="h-4 w-4"
               fill="none"
@@ -301,7 +301,7 @@ export default function EidtPlan() {
             Delete Plan
           </button>
 
-          <div className="flex gap-3">
+          <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
             <button className="rounded-md bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200">
               Reset to Default
             </button>
