@@ -376,7 +376,7 @@ export function Sidebar() {
           <div className="mt-auto border-t pt-5">
             <button
               onClick={handleLogout}
-              className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-red-600 hover:bg-red-50"
+              className="flex w-full items-center gap-3 rounded-xl bg-red-100 px-4 py-3 text-red-600 hover:bg-red-200"
             >
               <LogOutIcon className="size-6" />
               <span className="font-medium">Logout</span>

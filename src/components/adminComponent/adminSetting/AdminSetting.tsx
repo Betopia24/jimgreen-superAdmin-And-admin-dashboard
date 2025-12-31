@@ -124,7 +124,7 @@ const AdminSettingsPage = () => {
 
             <button
               onClick={profileForm.handleSubmit(onProfileSubmit)}
-              className="rounded-md bg-blue-600 px-6 py-2 font-medium text-white transition-colors hover:bg-blue-700"
+              className="rounded-md bg-primary px-6 py-2 font-medium text-white transition-colors hover:bg-blue-700"
             >
               Save Changes
             </button>
@@ -156,7 +156,7 @@ const AdminSettingsPage = () => {
                 onClick={() => toggleNotification("emailNotifications")}
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                   notifications.emailNotifications
-                    ? "bg-blue-600"
+                    ? "bg-primary"
                     : "bg-gray-300"
                 }`}
               >
@@ -182,7 +182,7 @@ const AdminSettingsPage = () => {
               <button
                 onClick={() => toggleNotification("meetingReminders")}
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                  notifications.meetingReminders ? "bg-blue-600" : "bg-gray-300"
+                  notifications.meetingReminders ? "bg-primary" : "bg-gray-300"
                 }`}
               >
                 <span
@@ -205,7 +205,7 @@ const AdminSettingsPage = () => {
               <button
                 onClick={() => toggleNotification("aiInsights")}
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                  notifications.aiInsights ? "bg-blue-600" : "bg-gray-300"
+                  notifications.aiInsights ? "bg-primary" : "bg-gray-300"
                 }`}
               >
                 <span
@@ -270,7 +270,7 @@ const AdminSettingsPage = () => {
 
             <button
               onClick={securityForm.handleSubmit(onSecuritySubmit)}
-              className="rounded-md bg-blue-600 px-6 py-2 font-medium text-white transition-colors hover:bg-blue-700"
+              className="rounded-md bg-primary px-6 py-2 font-medium text-white transition-colors hover:bg-blue-700"
             >
               Save Preferences
             </button>

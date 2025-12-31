@@ -7,16 +7,16 @@ export function Logo() {
       <Image
         src={logoThree}
         fill
-        // className="dark:hidden"
-        alt="NextAdmin logo"
+        className="dark:hidden"
+        alt=" logo"
         role="presentation"
       />
 
       <Image
         src={logoThree}
         fill
-        // className="hidden dark:block"
-        alt="NextAdmin logo"
+        className="hidden dark:block"
+        alt=" logo"
         role="presentation"
       />
     </div>

@@ -201,7 +201,7 @@ const TeamManagement: React.FC = () => {
               <div className="relative">
                 <button
                   onClick={() => setShowFilterMenu(!showFilterMenu)}
-                  className="flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2 transition-colors hover:bg-gray-50"
+                  className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-300 px-4 py-2 transition-colors hover:bg-gray-50"
                 >
                   <Filter className="h-4 w-4 text-gray-600" />
                   <span className="text-sm font-medium text-gray-700">
