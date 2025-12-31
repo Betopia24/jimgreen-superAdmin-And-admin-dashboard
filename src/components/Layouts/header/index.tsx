@@ -6,12 +6,13 @@ import { useSidebarContext } from "../sidebar/sidebar-context";
 import { MenuIcon } from "./icons";
 
 import { UserInfo } from "./user-info";
+import LogoPhone from "@/assets/logos/phoneLolo.png";
 
 export function Header() {
   const { toggleSidebar, isMobile } = useSidebarContext();
 
   return (
-    <header className="sticky top-0 z-30 flex items-center justify-between border-b border-stroke bg-white py-5 shadow-1 dark:border-stroke-dark dark:bg-gray-dark md:px-5 2xl:px-10">
+    <header className="sticky top-0 z-30 flex items-center justify-between border-b border-stroke bg-white px-3 py-5 shadow-1 dark:border-stroke-dark dark:bg-gray-dark md:px-5 2xl:px-10">
       <button
         onClick={toggleSidebar}
         className="rounded-lg border px-1.5 py-1 dark:border-stroke-dark dark:bg-[#020D1A] hover:dark:bg-[#FFFFFF1A] lg:hidden"
@@ -21,11 +22,11 @@ export function Header() {
       </button>
 
       {isMobile && (
-        <Link href={"/"} className="ml-2 max-[430px]:hidden min-[375px]:ml-4">
+        <Link href={"/"} className="ml-2 max-[430px]:hidden min-[375px]:ml-1">
           <Image
-            src={"/images/logo/logoAdmin.png"}
-            width={32}
-            height={32}
+            src={LogoPhone}
+            width={42}
+            height={42}
             alt=""
             role="presentation"
           />
