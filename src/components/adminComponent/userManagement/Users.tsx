@@ -162,7 +162,7 @@ const TeamManagement: React.FC = () => {
         <div className="flex justify-between">
           <div className="mb-8">
             <h1 className="mb-2 text-3xl font-bold text-gray-900">
-              User Management
+              Team Management
             </h1>
             <p className="text-gray-600">
               Manage and monitor all users across your platform
@@ -172,7 +172,7 @@ const TeamManagement: React.FC = () => {
             <button className="flex gap-2 rounded-md bg-primary px-8 py-3 text-lg font-medium text-white">
               {" "}
               <Plus />
-              Add User
+              Add Team Member
             </button>
           </div>
         </div>

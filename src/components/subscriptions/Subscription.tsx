@@ -85,7 +85,7 @@ const SubscriptionPlan: React.FC = () => {
             </p>
           </div>
           <Link
-            href={`/subscriptions/add-plan`}
+            href={`/super-admin/subscriptions/add-plan`}
             className="rounded-lg bg-primary px-6 py-2.5 font-medium text-white transition hover:bg-blue-900"
           >
             Add New Plan
@@ -158,7 +158,7 @@ const SubscriptionPlan: React.FC = () => {
 
                 {/* Bottom Button */}
                 <Link
-                  href={`/subscriptions/edit-plan`}
+                  href={`/super-admin/subscriptions/edit-plan`}
                   className="bg-[rgba(255, 255, 255, 0.20)] mt-auto flex w-full items-center justify-center gap-3 rounded-full border py-2 text-sm font-medium text-gray-700 transition hover:bg-primary hover:text-white"
                 >
                   Edit Plan

@@ -31,7 +31,7 @@ export function Sidebar() {
     }
 
     // Other routes (nested)
-    return pathname === url || pathname.startsWith(url + "/");
+    return pathname === url || pathname.startsWith(url + "/super-admin");
   };
 
   const toggleExpanded = (title: string) => {
