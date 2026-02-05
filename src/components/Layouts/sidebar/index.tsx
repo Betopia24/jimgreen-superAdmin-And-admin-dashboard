@@ -6,10 +6,12 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { NAV_DATA_SUPER_ADMIN, NAV_DATA_ADMIN } from "./data";
 import { ArrowLeftIcon, ChevronUp } from "./icons";
-import { LogOut as LogOutIcon } from "lucide-react";
+import { LogOut, LogOut as LogOutIcon, LucideLoader } from "lucide-react";
 import { MenuItem } from "./menu-item";
 import { useSidebarContext } from "./sidebar-context";
 import type { NavItem } from "./data/types";
+import Cookies from "js-cookie";
+import { toast } from "sonner";
 
 export function Sidebar() {
   const pathname = usePathname();
@@ -17,6 +19,7 @@ export function Sidebar() {
   const { setIsOpen, isOpen, isMobile, toggleSidebar } = useSidebarContext();
 
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
+  const [loading, setLoading] = useState<Boolean>(false);
 
   /** ⭐ Correct nested URL detection */
   const isActiveUrl = (url?: string): boolean => {
@@ -28,7 +31,7 @@ export function Sidebar() {
     }
 
     // Other routes (nested)
-    return pathname === url || pathname.startsWith(url + "/super-admin");
+    return pathname === url || pathname.startsWith(url + "/");
   };
 
   const toggleExpanded = (title: string) => {
@@ -41,7 +44,7 @@ export function Sidebar() {
 
   let NAV_DATA = [];
   if (
-    pathname === "/dashboard/teacher" ||
+    pathname === "/admin" ||
     pathname === "/admin/team-management" ||
     pathname === "/admin/subscriptions" ||
     pathname === "/admin/reports-Analytics" ||
@@ -66,9 +69,22 @@ export function Sidebar() {
     );
   }, [pathname]);
 
-  const handleLogout = () => {
-    if (isMobile) toggleSidebar();
-    // router.push("/");
+  // const handleLogout = () => {
+  //   if (isMobile) toggleSidebar();
+  //   // router.push("/");
+  // };
+
+  const handleLogOut = () => {
+    setLoading(true);
+    setTimeout(() => {
+      localStorage.removeItem("persist:root");
+      Cookies.remove("accessToken");
+      Cookies.remove("refreshToken");
+      Cookies.remove("token");
+      toast.success("Logged out successfully");
+      router.push("http://localhost:3008/signIn"); // optional redirect
+      setLoading(false); // 2-second delay
+    }, 2000);
   };
 
   return (
@@ -181,12 +197,36 @@ export function Sidebar() {
 
           {/* Logout */}
           <div className="mt-auto border-t pt-5">
-            <button
+            {/* <button
               onClick={handleLogout}
               className="flex w-full items-center gap-3 rounded-xl bg-red-100 px-4 py-3 text-red-600 hover:bg-red-200"
             >
               <LogOutIcon className="size-6" />
               <span className="font-medium">Logout</span>
+            </button> */}
+
+            <button
+              onClick={handleLogOut}
+              className="group flex w-full cursor-pointer items-center gap-3 rounded-xl bg-red-100 px-4 py-4 text-red-600 hover:bg-red-200"
+            >
+              {loading ? (
+                <>
+                  <LucideLoader
+                    className={`absolutem animate-spin text-center text-[#D00E11]`}
+                  />
+                </>
+              ) : (
+                <>
+                  <LogOut
+                    size={22}
+                    className="text-[#D00E11] transition-transform duration-200 group-hover:scale-110"
+                  />
+                </>
+              )}
+
+              <span className="text-[16px] font-medium text-[#D00E11]">
+                Logout
+              </span>
             </button>
           </div>
         </div>
