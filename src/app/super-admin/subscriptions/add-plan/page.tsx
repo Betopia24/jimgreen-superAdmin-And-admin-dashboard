@@ -1,5 +1,4 @@
 import NewPlan from "@/components/subscriptions/addPlan/NewPlanCreate";
-import React from "react";
 
 const page = () => {
   return (

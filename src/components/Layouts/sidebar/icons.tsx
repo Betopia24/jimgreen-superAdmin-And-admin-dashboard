@@ -172,4 +172,6 @@ export {
   Settings,
   Building2,
   ChartLineIcon,
+  BotMessageSquare,
+  Brain,
 } from "lucide-react";

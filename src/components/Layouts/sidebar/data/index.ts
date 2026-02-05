@@ -62,24 +62,24 @@ export const NAV_DATA_SUPER_ADMIN: NavSection[] = [
       {
         title: "Dashboard",
         icon: Icons.LayoutDashboard,
-        url: "/",
+        url: "/super-admin",
         items: [],
       },
       {
         title: "User Management",
-        url: "/user-management",
+        url: "/super-admin/user-management",
         icon: Icons.Users,
         items: [],
       },
       {
         title: "Company Management",
         icon: Icons.Building2,
-        url: "/company-management",
+        url: "/super-admin/company-management",
         items: [],
       },
       {
         title: "Subscriptions",
-        url: "/subscriptions",
+        url: "/super-admin/subscriptions",
         icon: Icons.CreditCard,
         items: [],
       },
@@ -87,7 +87,7 @@ export const NAV_DATA_SUPER_ADMIN: NavSection[] = [
       {
         title: "Settings",
         icon: Icons.Settings,
-        url: "/settings",
+        url: "/super-admin/settings",
         items: [],
       },
     ],
