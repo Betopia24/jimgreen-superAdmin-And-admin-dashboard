@@ -38,7 +38,6 @@ const StatCard: React.FC<StatCardProps> = ({
 };
 
 export default function DashboardOverview({ stats: statsProps }: any) {
-  console.log(statsProps);
   const stats = [
     {
       icon: <Users className="h-6 w-6 text-primary" />,
