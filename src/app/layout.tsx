@@ -36,7 +36,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body>
+      <body cz-shortcut-listen="true">
         <ReduxProvider>
           <Providers>
             <NextTopLoader color="#5750F1" showSpinner={false} />

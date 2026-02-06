@@ -1,70 +1,97 @@
-"use clinet";
+"use client";
+import { useGetActiveSubscriptionPanQuery } from "@/redux/api/subscriptoinPan/subscriptionPlanSliceApi";
 import React from "react";
 
-interface Plan {
-  name: string;
-  highlighted: boolean;
-  description: string;
-  price: number | string;
-  features: string[];
+// interface Plan {
+//   name: string;
+//   highlighted: boolean;
+//   description: string;
+//   price: number | string;
+//   features: string[];
+// }
+
+// interface Distribution {
+//   plan: string;
+//   users: number;
+//   percentage: number;
+//   color: string;
+// }
+
+export interface PlanFeatures {
+  aiAnalysis: boolean;
+  prioritySupport: boolean;
+  apiAccess: boolean;
+  customBranding: boolean;
+  dashboardAnalytics: boolean;
+  advancedReports: boolean;
 }
 
-interface Distribution {
-  plan: string;
-  users: number;
-  percentage: number;
-  color: string;
+export interface Plan {
+  id: string;
+  name: "EXPERT" | "ADVANCED" | string; // keep string for future plans
+  isActive: boolean;
+  monthlyPrice: number;
+  annualPrice: number;
+  description: string;
+  maxReports: number;
+  maxAccounts: number;
+  features: PlanFeatures;
+  createdAt: string; // ISO date string
+  updatedAt: string; // ISO date string
 }
 
 const AdminSubscriptionPlan: React.FC = () => {
-  const plans: Plan[] = [
-    {
-      name: "Basic",
-      highlighted: false,
-      description:
-        "The Slate necessities. Every thing you need to get up and running.",
-      price: "Free",
-      features: [
-        "3 meeting preparations per month",
-        "Basic company insights",
-        "Meeting summary export",
-        "Email support",
-      ],
-    },
-    {
-      name: "Advanced",
-      highlighted: true,
-      description:
-        "The Slate necessities. Every thing you need to get up and running.",
-      price: 100.0,
-      features: [
-        "Unlimited meeting preparations",
-        "Advanced AI insights & scripts",
-        "Competitor analysis",
-        "Risk alerts & red flags",
-        "Meeting templates",
-        "Priority support",
-        "Team collaboration (coming soon)",
-      ],
-    },
-    {
-      name: "Expert",
-      highlighted: false,
-      description:
-        "The Slate necessities. Every thing you need to get up and running.",
-      price: 230.0,
-      features: [
-        "Unlimited meeting preparations",
-        "Team collaboration (coming soon)",
-        "Competitor analysis",
-        "Risk alerts & red flags",
-        "Priority support",
-        "Advanced AI insights & scripts",
-      ],
-    },
-  ];
-
-  const distribution: Distribution[] = [
+  const { data } = useGetActiveSubscriptionPanQuery("");
+  console.log(data);
+  // const plans: Plan[] = [
+  //   {
+  //     name: "Basic",
+  //     highlighted: false,
+  //     description:
+  //       "The Slate necessities. Every thing you need to get up and running.",
+  //     price: "Free",
+  //     features: [
+  //       "3 meeting preparations per month",
+  //       "Basic company insights",
+  //       "Meeting summary export",
+  //       "Email support",
+  //     ],
+  //   },
+  //   {
+  //     name: "Advanced",
+  //     highlighted: true,
+  //     description:
+  //       "The Slate necessities. Every thing you need to get up and running.",
+  //     price: 100.0,
+  //     features: [
+  //       "Unlimited meeting preparations",
+  //       "Advanced AI insights & scripts",
+  //       "Competitor analysis",
+  //       "Risk alerts & red flags",
+  //       "Meeting templates",
+  //       "Priority support",
+  //       "Team collaboration (coming soon)",
+  //     ],
+  //   },
+  //   {
+  //     name: "Expert",
+  //     highlighted: false,
+  //     description:
+  //       "The Slate necessities. Every thing you need to get up and running.",
+  //     price: 230.0,
+  //     features: [
+  //       "Unlimited meeting preparations",
+  //       "Team collaboration (coming soon)",
+  //       "Competitor analysis",
+  //       "Risk alerts & red flags",
+  //       "Priority support",
+  //       "Advanced AI insights & scripts",
+  //     ],
+  //   },
+  // ];
+  const plans: Plan[] = data?.data;
+  console.log(plans);
+  const distribution = [
     { plan: "Free", users: 4224, percentage: 34, color: "bg-gray-400" },
     { plan: "Pro", users: 5834, percentage: 47, color: "bg-primary" },
     { plan: "Enterprise", users: 2400, percentage: 19, color: "bg-green-600" },
@@ -88,7 +115,7 @@ const AdminSubscriptionPlan: React.FC = () => {
         {/* Subscription Plans */}
         <div className="mb-8">
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {plans.map((plan: Plan, index: number) => (
+            {plans?.map((plan: Plan, index: number) => (
               <div
                 key={index}
                 className={`flex h-full flex-col rounded-lg bg-white p-6 shadow-sm`}
@@ -96,7 +123,7 @@ const AdminSubscriptionPlan: React.FC = () => {
                 <div className="mb-4 rounded-xl bg-gray-2 p-4">
                   <div
                     className={`mb-4 inline-block rounded-full px-4 py-1 text-sm font-medium ${
-                      plan.highlighted
+                      plan.name === "ADVANCED"
                         ? "bg-primary text-white"
                         : "bg-white text-primary"
                     }`}
@@ -111,17 +138,17 @@ const AdminSubscriptionPlan: React.FC = () => {
 
                   {/* Price */}
                   <div className="mb-6">
-                    {typeof plan?.price === "number" ? (
+                    {typeof plan?.monthlyPrice === "number" ? (
                       <>
                         <span className="text-2xl font-bold text-gray-900 xl:text-3xl">
-                          ${plan.price}
+                          ${plan.monthlyPrice}
                         </span>
                         <span className="ml-2 text-gray-500">/Month</span>
                       </>
                     ) : (
                       <>
                         <span className="text-2xl font-bold text-gray-900 xl:text-3xl">
-                          {plan.price}
+                          {plan.monthlyPrice}
                         </span>
                         <span className="ml-2 text-gray-500"></span>
                       </>
@@ -135,8 +162,8 @@ const AdminSubscriptionPlan: React.FC = () => {
                     Featured Include :
                   </p>
 
-                  <ul className="space-y-2.5">
-                    {plan.features.map((feature: string, idx: number) => (
+                  {/* <ul className="space-y-2.5">
+                    {plan?.features?.map((feature: string, idx: number) => (
                       <li
                         key={idx}
                         className="flex items-start gap-2 text-sm text-gray-600"
@@ -157,7 +184,7 @@ const AdminSubscriptionPlan: React.FC = () => {
                         <span>{feature}</span>
                       </li>
                     ))}
-                  </ul>
+                  </ul> */}
                 </div>
 
                 {/* Bottom Button */}
