@@ -1,6 +1,9 @@
 "use client";
 import { useGetActiveSubscriptionPanQuery } from "@/redux/api/subscriptoinPan/subscriptionPlanSliceApi";
+import { setPlan } from "@/redux/features/payment/paymentSlice";
+import LoadingPage from "@/share/loading/LoadingPage";
 import React from "react";
+import { useDispatch } from "react-redux";
 
 export interface PlanFeatures {
   aiAnalysis: boolean;
@@ -26,7 +29,9 @@ export interface Plan {
 }
 
 const AdminSubscriptionPlan: React.FC = () => {
-  const { data } = useGetActiveSubscriptionPanQuery("");
+  const { data, isLoading } = useGetActiveSubscriptionPanQuery("");
+
+  const dispatch = useDispatch();
   console.log(data);
   // const plans: Plan[] = [
   //   {
@@ -83,8 +88,17 @@ const AdminSubscriptionPlan: React.FC = () => {
   ];
 
   const handleSubscriptSelect = (subscriptionId: string) => {
-    console.log(subscriptionId);
+    dispatch(
+      setPlan({
+        planId: subscriptionId,
+        planType: "monthly",
+      }),
+    );
   };
+
+  if (isLoading) {
+    return <LoadingPage />;
+  }
 
   return (
     <div className="min-h-screen">
