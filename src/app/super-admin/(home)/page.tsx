@@ -1,11 +1,16 @@
+"use client";
 import { createTimeFrameExtractor } from "@/utils/timeframe-extractor";
 import { Suspense } from "react";
 
 import { OverviewCardsSkeleton } from "./_components/overview-cards/skeleton";
 
-import RecentActivity from "./_components/recentActivity/RecentActivity";
+import RecentActivity, {
+  ActivityLog,
+} from "./_components/recentActivity/RecentActivity";
 import DashboardOverview from "./_components/overview-cards/OverView";
 import RevenueGrowthChart from "./_components/chats/Chats";
+import { useGetsuperAdminDashboardOverviewQuery } from "@/redux/api/super-admin/dashboardOverview/superAdminOverViewSlicApi";
+import LoadingPage from "@/share/loading/LoadingPage";
 
 type PropsType = {
   searchParams: Promise<{
@@ -13,11 +18,20 @@ type PropsType = {
   }>;
 };
 
-export default async function Home({ searchParams }: PropsType) {
+export default function Home({ searchParams }: PropsType) {
+  const { data, isLoading } = useGetsuperAdminDashboardOverviewQuery("");
+
+  const allHomeData = data?.data;
+
+  const recentActive: ActivityLog[] = allHomeData?.recentActivities;
+  console.log(allHomeData);
+  if (isLoading) {
+    return <LoadingPage />;
+  }
   return (
     <>
       <Suspense fallback={<OverviewCardsSkeleton />}>
-        <DashboardOverview />
+        <DashboardOverview stats={allHomeData?.stats} />
       </Suspense>
 
       <div className="mt-10">
@@ -40,7 +54,7 @@ export default async function Home({ searchParams }: PropsType) {
         <RegionLabels />
       </div> */}
       <div className="mt-10">
-        <RecentActivity />
+        <RecentActivity recentActive={recentActive} />
       </div>
     </>
   );

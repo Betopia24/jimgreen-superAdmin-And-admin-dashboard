@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Search,
   Filter,
@@ -11,85 +11,128 @@ import {
   Shield,
 } from "lucide-react";
 import Link from "next/link";
+import { useGetsuperAdminUsermanagementQuery } from "@/redux/api/super-admin/userManagement/superAdminUserManagementlicApi";
 
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  subscription: "Enterprise" | "Pro" | "Free";
-  createdDate: string;
-  lastActive: string;
-  status: "Active" | "Inactive" | "Suspended";
+export type UserStatus = "BLOCK" | "UNBLOCK";
+export type UserRole = "USER" | "ADMIN" | "SUPER_ADMIN";
+export type UserTier = "FREE" | "PAID";
+
+export interface CompanyMember {
+  id: string;
+  companyId: string;
+  role: "owner" | "member";
+  status: "active" | "inactive";
 }
 
-type FilterStatus = "All" | "Active" | "Inactive" | "Suspended";
+export interface ApiUser {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  avatar: string | null;
+  status: UserStatus;
+  role: UserRole;
+  tier: UserTier;
+  createdAt: string;
+  updatedAt: string;
+  companyMember: CompanyMember | null;
+}
+
+// export type UIUserStatus = "Active" | "Inactive" | "Suspended";
+export type FilterStatus = "All" | "Active" | "Inactive" | "Suspended";
+
+export interface UIUser {
+  id: string;
+  name: string;
+  email: string;
+  subscription: UserTier;
+  createdDate: string;
+  lastActive: string;
+  status: FilterStatus;
+}
+
+const mapApiUserToUIUser = (user: ApiUser): UIUser => ({
+  id: user.id,
+  name: `${user.firstName} ${user.lastName}`,
+  email: user.email,
+  subscription: user.tier,
+  createdDate: new Date(user.createdAt).toLocaleDateString(),
+  lastActive: new Date(user.updatedAt).toLocaleDateString(),
+  status: user.status === "UNBLOCK" ? "Active" : "Suspended",
+});
 
 const UserManagement: React.FC = () => {
-  const [users, setUsers] = useState<User[]>([
-    {
-      id: 1,
-      name: "Dianne Russell",
-      email: "felicia.reid@example.com",
-      subscription: "Enterprise",
-      createdDate: "Jan 16, 2024",
-      lastActive: "2 min ago",
-      status: "Active",
-    },
-    {
-      id: 2,
-      name: "Albert Flores",
-      email: "debra.holt@example.com",
-      subscription: "Pro",
-      createdDate: "Feb 3, 2024",
-      lastActive: "2 min ago",
-      status: "Active",
-    },
-    {
-      id: 3,
-      name: "Darrell Steward",
-      email: "tanya.hill@example.com",
-      subscription: "Free",
-      createdDate: "Mar 12, 2024",
-      lastActive: "2 min ago",
-      status: "Active",
-    },
-    {
-      id: 4,
-      name: "Jacob Jones",
-      email: "debra.holt@example.com",
-      subscription: "Pro",
-      createdDate: "Jan 28, 2024",
-      lastActive: "2 min ago",
-      status: "Inactive",
-    },
-    {
-      id: 5,
-      name: "Floyd Miles",
-      email: "felicia.reid@example.com",
-      subscription: "Enterprise",
-      createdDate: "Apr 5, 2024",
-      lastActive: "2 min ago",
-      status: "Active",
-    },
-    {
-      id: 6,
-      name: "Kristin Watson",
-      email: "sara.cruz@example.com",
-      subscription: "Free",
-      createdDate: "May 20, 2024",
-      lastActive: "2 min ago",
-      status: "Suspended",
-    },
-  ]);
+  const { data, isLoading } = useGetsuperAdminUsermanagementQuery("");
+  console.log(data);
+  const [users, setUsers] = useState<UIUser[]>([]);
+  // const [users, setUsers] = useState<User[]>(data?.data || []);
+  // const [users, setUsers] = useState<User[]>([
+  //   {
+  //     id: 1,
+  //     name: "Dianne Russell",
+  //     email: "felicia.reid@example.com",
+  //     subscription: "Enterprise",
+  //     createdDate: "Jan 16, 2024",
+  //     lastActive: "2 min ago",
+  //     status: "Active",
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Albert Flores",
+  //     email: "debra.holt@example.com",
+  //     subscription: "Pro",
+  //     createdDate: "Feb 3, 2024",
+  //     lastActive: "2 min ago",
+  //     status: "Active",
+  //   },
+  //   {
+  //     id: 3,
+  //     name: "Darrell Steward",
+  //     email: "tanya.hill@example.com",
+  //     subscription: "Free",
+  //     createdDate: "Mar 12, 2024",
+  //     lastActive: "2 min ago",
+  //     status: "Active",
+  //   },
+  //   {
+  //     id: 4,
+  //     name: "Jacob Jones",
+  //     email: "debra.holt@example.com",
+  //     subscription: "Pro",
+  //     createdDate: "Jan 28, 2024",
+  //     lastActive: "2 min ago",
+  //     status: "Inactive",
+  //   },
+  //   {
+  //     id: 5,
+  //     name: "Floyd Miles",
+  //     email: "felicia.reid@example.com",
+  //     subscription: "Enterprise",
+  //     createdDate: "Apr 5, 2024",
+  //     lastActive: "2 min ago",
+  //     status: "Active",
+  //   },
+  //   {
+  //     id: 6,
+  //     name: "Kristin Watson",
+  //     email: "sara.cruz@example.com",
+  //     subscription: "Free",
+  //     createdDate: "May 20, 2024",
+  //     lastActive: "2 min ago",
+  //     status: "Suspended",
+  //   },
+  // ]);
 
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [filterStatus, setFilterStatus] = useState<FilterStatus>("All");
   const [showFilterMenu, setShowFilterMenu] = useState<boolean>(false);
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [selectedUser, setSelectedUser] = useState<UIUser | null>(null);
   const [showDetailsModal, setShowDetailsModal] = useState<boolean>(false);
-  const [activeActionMenu, setActiveActionMenu] = useState<number | null>(null);
+  // const [activeActionMenu, setActiveActionMenu] = useState<number | null>(null);
 
-  const filteredUsers = users.filter((user: User) => {
+  const [activeActionMenu, setActiveActionMenu] = useState<string | null>(null);
+
+  const filteredUsers = users?.filter((user: UIUser) => {
     const matchesSearch =
       user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.email.toLowerCase().includes(searchTerm.toLowerCase());
@@ -98,7 +141,13 @@ const UserManagement: React.FC = () => {
     return matchesSearch && matchesFilter;
   });
 
-  const getStatusColor = (status: User["status"]): string => {
+  useEffect(() => {
+    if (!data?.data) return;
+
+    setUsers(data.data.map(mapApiUserToUIUser));
+  }, [data]);
+
+  const getStatusColor = (status: UIUser["status"]): string => {
     switch (status) {
       case "Active":
         return "bg-green-100 text-green-700";
@@ -111,33 +160,39 @@ const UserManagement: React.FC = () => {
     }
   };
 
-  const getSubscriptionColor = (subscription: User["subscription"]): string => {
+  const getSubscriptionColor = (
+    subscription: UIUser["subscription"],
+  ): string => {
     switch (subscription) {
-      case "Enterprise":
+      case "PAID":
         return "bg-gray-800 text-white";
-      case "Pro":
-        return "bg-gray-300 text-block ";
-      case "Free":
+      case "FREE":
         return "bg-gray-50 text-gray-700 border";
       default:
         return "bg-gray-300 text-gray-700";
     }
   };
 
-  const handleViewDetails = (user: User): void => {
+  const handleSuspendUser = (userId: string) => {
+    setUsers((prev) =>
+      prev.map((u) => (u.id === userId ? { ...u, status: "Suspended" } : u)),
+    );
+  };
+
+  const handleViewDetails = (user: UIUser): void => {
     setSelectedUser(user);
     setShowDetailsModal(true);
     setActiveActionMenu(null);
   };
 
-  const handleSuspendUser = (userId: number): void => {
-    setUsers(
-      users.map((user: User) =>
-        user.id === userId ? { ...user, status: "Suspended" as const } : user,
-      ),
-    );
-    setActiveActionMenu(null);
-  };
+  // const handleSuspendUser = (userId: number): void => {
+  //   setUsers(
+  //     users.map((user: User) =>
+  //       user.id === userId ? { ...user, status: "Suspended" as const } : user,
+  //     ),
+  //   );
+  //   setActiveActionMenu(null);
+  // };
 
   const filterOptions: FilterStatus[] = [
     "All",
@@ -245,7 +300,7 @@ const UserManagement: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 bg-white">
-                {filteredUsers.map((user: User) => (
+                {filteredUsers.map((user: UIUser) => (
                   <tr
                     key={user.id}
                     className="transition-colors hover:bg-gray-50"
