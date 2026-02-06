@@ -90,7 +90,7 @@ const RecentActivity: React.FC = ({ recent }: any) => {
                   <div className="flex min-w-0 flex-1 items-center gap-3 sm:gap-4">
                     {/* Avatar */}
                     <div
-                      className={`${activity.bgColor} flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-sm font-semibold text-white shadow-md sm:h-12 sm:w-12 sm:text-base`}
+                      className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-primary text-sm font-semibold text-white shadow-md sm:h-12 sm:w-12 sm:text-base`}
                     >
                       {activity.performerImage || "DS"}
                     </div>
