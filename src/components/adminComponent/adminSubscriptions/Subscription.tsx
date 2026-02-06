@@ -2,21 +2,6 @@
 import { useGetActiveSubscriptionPanQuery } from "@/redux/api/subscriptoinPan/subscriptionPlanSliceApi";
 import React from "react";
 
-// interface Plan {
-//   name: string;
-//   highlighted: boolean;
-//   description: string;
-//   price: number | string;
-//   features: string[];
-// }
-
-// interface Distribution {
-//   plan: string;
-//   users: number;
-//   percentage: number;
-//   color: string;
-// }
-
 export interface PlanFeatures {
   aiAnalysis: boolean;
   prioritySupport: boolean;
@@ -96,6 +81,10 @@ const AdminSubscriptionPlan: React.FC = () => {
     { plan: "Pro", users: 5834, percentage: 47, color: "bg-primary" },
     { plan: "Enterprise", users: 2400, percentage: 19, color: "bg-green-600" },
   ];
+
+  const handleSubscriptSelect = (subscriptionId: string) => {
+    console.log(subscriptionId);
+  };
 
   return (
     <div className="min-h-screen">
@@ -188,7 +177,10 @@ const AdminSubscriptionPlan: React.FC = () => {
                 </div>
 
                 {/* Bottom Button */}
-                <button className="mt-auto flex w-full items-center justify-center gap-3 rounded-full border bg-primary py-2 text-sm font-medium text-gray-700 text-white transition hover:bg-primary hover:text-white">
+                <button
+                  onClick={() => handleSubscriptSelect(plan.id)}
+                  className="mt-auto flex w-full items-center justify-center gap-3 rounded-full border bg-primary py-2 text-sm font-medium text-gray-700 text-white transition hover:bg-primary hover:text-white"
+                >
                   Upgrade Plan
                   <svg
                     className="h-4 w-4"
