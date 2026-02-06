@@ -37,34 +37,35 @@ const StatCard: React.FC<StatCardProps> = ({
   );
 };
 
-export default function DashboardOverview() {
+export default function DashboardOverview({ stats: statsProps }: any) {
+  console.log(statsProps);
   const stats = [
     {
       icon: <Users className="h-6 w-6 text-primary" />,
       title: "Total Users",
-      value: "12,458",
-      change: "+12.5%",
+      value: `${statsProps?.totalUsers?.value}`,
+      change: `${statsProps?.totalUsers?.change}`,
       iconBgColor: "bg-indigo-100",
     },
     {
       icon: <CreditCard className="h-6 w-6 text-primary" />,
       title: "Active Subscriptions",
-      value: "8,234",
-      change: "+8.2%",
+      value: `${statsProps?.totalSubscriptions?.value}`,
+      change: `${statsProps?.totalSubscriptions?.change}`,
       iconBgColor: "bg-indigo-100",
     },
     {
       icon: <DollarSign className="h-6 w-6 text-primary" />,
       title: "Monthly Revenue",
-      value: "$124,567",
-      change: "+15.3%",
+      value: `${statsProps?.monthlyRevenue?.value}`,
+      change: `${statsProps?.monthlyRevenue?.change}`,
       iconBgColor: "bg-indigo-100",
     },
     {
       icon: <TrendingUp className="h-6 w-6 text-primary" />,
       title: "Subscription Health",
-      value: "94.2%",
-      change: "+2.4%",
+      value: `${statsProps?.activeSubscriptions?.value}`,
+      change: `${statsProps?.activeSubscriptions?.change}`,
       iconBgColor: "bg-indigo-100",
     },
   ];
