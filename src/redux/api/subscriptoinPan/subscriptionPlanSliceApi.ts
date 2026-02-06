@@ -2,9 +2,9 @@ import baseApi from "../baseApi";
 
 export const subscriptionPanApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    createRowMaterials: builder.mutation({
+    paymentCreate: builder.mutation({
       query: (body) => ({
-        url: "/raw-materials",
+        url: "/payments/subscription/create",
         method: "POST",
         body,
       }),
@@ -21,4 +21,5 @@ export const subscriptionPanApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetActiveSubscriptionPanQuery } = subscriptionPanApi;
+export const { useGetActiveSubscriptionPanQuery, usePaymentCreateMutation } =
+  subscriptionPanApi;

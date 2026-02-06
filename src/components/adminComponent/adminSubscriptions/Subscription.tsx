@@ -1,7 +1,11 @@
 "use client";
-import { useGetActiveSubscriptionPanQuery } from "@/redux/api/subscriptoinPan/subscriptionPlanSliceApi";
+import {
+  useGetActiveSubscriptionPanQuery,
+  usePaymentCreateMutation,
+} from "@/redux/api/subscriptoinPan/subscriptionPlanSliceApi";
 import { setPlan } from "@/redux/features/payment/paymentSlice";
 import LoadingPage from "@/share/loading/LoadingPage";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { useDispatch } from "react-redux";
 
@@ -30,9 +34,11 @@ export interface Plan {
 
 const AdminSubscriptionPlan: React.FC = () => {
   const { data, isLoading } = useGetActiveSubscriptionPanQuery("");
+  const [paymentPost, { isLoading: payLoading }] = usePaymentCreateMutation();
+  const router = useRouter();
 
   const dispatch = useDispatch();
-  console.log(data);
+
   // const plans: Plan[] = [
   //   {
   //     name: "Basic",
@@ -87,13 +93,24 @@ const AdminSubscriptionPlan: React.FC = () => {
     { plan: "Enterprise", users: 2400, percentage: 19, color: "bg-green-600" },
   ];
 
-  const handleSubscriptSelect = (subscriptionId: string) => {
+  const handleSubscriptSelect = async (subscriptionId: string) => {
+    try {
+      const response = await paymentPost({
+        planId: subscriptionId,
+        planType: "monthly",
+      }).unwrap();
+
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
     dispatch(
       setPlan({
         planId: subscriptionId,
         planType: "monthly",
       }),
     );
+    // router.push("/admin/subscriptions/payment");
   };
 
   if (isLoading) {
