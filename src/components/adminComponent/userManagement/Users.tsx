@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import DeactivateModal from "./Modal";
+import { useGetsuperAdminUsermanagementQuery } from "@/redux/api/super-admin/userManagement/superAdminUserManagementlicApi";
 
 interface User {
   id: number;
@@ -29,6 +30,7 @@ type FilterStatus = "All" | "Active" | "Inactive" | "Suspended";
 
 const TeamManagement: React.FC = () => {
   const [open, setOpen] = useState(false);
+  const { data, isLoading } = useGetsuperAdminUsermanagementQuery("");
   const [users, setUsers] = useState<User[]>([
     {
       id: 1,
