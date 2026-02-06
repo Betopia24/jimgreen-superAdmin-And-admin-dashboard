@@ -51,7 +51,7 @@ export default function Home({ searchParams }: PropsType) {
         <RegionLabels />
       </div> */}
       <div className="mt-10">
-        <RecentActivity />
+        <RecentActivity recent={allHomeData?.recentActivities} />
       </div>
     </>
   );
