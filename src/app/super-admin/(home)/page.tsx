@@ -4,7 +4,9 @@ import { Suspense } from "react";
 
 import { OverviewCardsSkeleton } from "./_components/overview-cards/skeleton";
 
-import RecentActivity from "./_components/recentActivity/RecentActivity";
+import RecentActivity, {
+  ActivityLog,
+} from "./_components/recentActivity/RecentActivity";
 import DashboardOverview from "./_components/overview-cards/OverView";
 import RevenueGrowthChart from "./_components/chats/Chats";
 import { useGetsuperAdminDashboardOverviewQuery } from "@/redux/api/super-admin/dashboardOverview/superAdminOverViewSlicApi";
@@ -21,6 +23,7 @@ export default function Home({ searchParams }: PropsType) {
 
   const allHomeData = data?.data;
 
+  const recentActive: ActivityLog[] = allHomeData?.recentActivities;
   console.log(allHomeData);
   if (isLoading) {
     return <LoadingPage />;
@@ -51,7 +54,7 @@ export default function Home({ searchParams }: PropsType) {
         <RegionLabels />
       </div> */}
       <div className="mt-10">
-        <RecentActivity recent={allHomeData?.recentActivities} />
+        <RecentActivity recentActive={recentActive} />
       </div>
     </>
   );

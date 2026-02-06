@@ -18,12 +18,15 @@ export interface ActivityLog {
   performerImage: string | null;
   details: unknown | null;
   createdAt: string;
-  bgColor?: string;
 }
 
-const RecentActivity: React.FC = ({ recent }: any) => {
-  console.log(recent);
-  const activities: ActivityLog[] = recent;
+interface RecentActivityProps {
+  recentActive: ActivityLog[];
+}
+
+const RecentActivity: React.FC<RecentActivityProps> = ({ recentActive }) => {
+  console.log(recentActive);
+  const activities: ActivityLog[] = recentActive;
   // const activities: Activity[] = [
   //   {
   //     id: 1,
