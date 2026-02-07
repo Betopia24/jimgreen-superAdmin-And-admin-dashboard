@@ -8,22 +8,23 @@ export const teamMemberManagementApi = baseApi.injectEndpoints({
         method: "POST",
         body: payload,
       }),
-      invalidatesTags: ["UserManagement"],
+      invalidatesTags: ["TeamManagement"],
     }),
     deleteTeamMember: builder.mutation({
-      query: (id) => ({
-        url: `/users/${id}`,
+      query: ({ companyId, memberId }) => ({
+        url: `/company/${companyId}/members/${memberId}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["UserManagement"],
+      invalidatesTags: ["TeamManagement"],
     }),
 
-    teamMemberSuspend: builder.mutation({
-      query: (id) => ({
-        url: `/users/${id}/status`,
-        method: "PATCH",
+    teamMemberStats: builder.mutation({
+      query: ({ companyId, memberId, payload }) => ({
+        url: `/company/${companyId}/members/${memberId}`,
+        method: "PUT",
+        body: payload,
       }),
-      invalidatesTags: ["UserManagement"],
+      invalidatesTags: ["TeamManagement"],
     }),
 
     getAllTeamMembers: builder.query({
@@ -31,18 +32,22 @@ export const teamMemberManagementApi = baseApi.injectEndpoints({
         url: `/company/${id}/members`,
         method: "GET",
       }),
-      providesTags: ["UserManagement"],
+      providesTags: ["TeamManagement"],
     }),
 
-    getsuperAdminUsermanagementSingle: builder.query({
+    getsuperAdminTeammanagementSingle: builder.query({
       query: (id) => ({
-        url: `/users/${id}`,
+        url: `/Teams/${id}`,
         method: "GET",
       }),
-      providesTags: ["UserManagement"],
+      providesTags: ["TeamManagement"],
     }),
   }),
 });
 
-export const { useCreateTeamMemberMutation, useGetAllTeamMembersQuery } =
-  teamMemberManagementApi;
+export const {
+  useCreateTeamMemberMutation,
+  useGetAllTeamMembersQuery,
+  useDeleteTeamMemberMutation,
+  useTeamMemberStatsMutation,
+} = teamMemberManagementApi;

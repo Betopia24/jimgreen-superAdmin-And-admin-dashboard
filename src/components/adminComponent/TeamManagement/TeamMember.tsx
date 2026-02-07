@@ -15,8 +15,13 @@ import {
 import Link from "next/link";
 import DeactivateModal from "./Modal";
 import { useGetsuperAdminUsermanagementQuery } from "@/redux/api/super-admin/userManagement/superAdminUserManagementlicApi";
-import { useGetAllTeamMembersQuery } from "@/redux/api/teamMember/teamMemberSliceApi";
+import {
+  useDeleteTeamMemberMutation,
+  useGetAllTeamMembersQuery,
+  useTeamMemberStatsMutation,
+} from "@/redux/api/teamMember/teamMemberSliceApi";
 import { useGetMeProfileQuery } from "@/redux/api/getMe/getMeApi";
+import DeleteConfirmModal from "@/share/DeteleConfirm/DeleteConfirm";
 
 // interface User {
 //   id: number;
@@ -72,13 +77,18 @@ const TeamManagement: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [filterStatus, setFilterStatus] = useState<FilterStatus>("All");
   const [showFilterMenu, setShowFilterMenu] = useState<boolean>(false);
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [selectedUser, setSelectedUser] = useState<TeamMember | null>(null);
   const [showDetailsModal, setShowDetailsModal] = useState<boolean>(false);
   const [activeActionMenu, setActiveActionMenu] = useState<number | null>(null);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<string | null>(null);
 
   const userProfile = data?.data as User;
   const id = userProfile?.companyMember?.companyId;
-
+  const [deleteMember, { isLoading: DeleteLoading }] =
+    useDeleteTeamMemberMutation();
+  const [statsUpdate, { isLoading: StatsLoading }] =
+    useTeamMemberStatsMutation();
   const { data: memberData, isLoading } = useGetAllTeamMembersQuery(id);
   const members: TeamMember[] = memberData?.data ?? [];
   const [users, setUsers] = useState(members);
@@ -91,15 +101,6 @@ const TeamManagement: React.FC = () => {
       user.email.toLowerCase().includes(searchTerm.toLowerCase())
     );
   });
-
-  // const filteredUsers = users.filter((user: User) => {
-  //   const matchesSearch =
-  //     user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  //     user.email.toLowerCase().includes(searchTerm.toLowerCase());
-  //   const matchesFilter =
-  //     filterStatus === "All" || user.status === filterStatus;
-  //   return matchesSearch && matchesFilter;
-  // });
 
   const getStatusColor = (status: "active" | "inactive"): string => {
     switch (status) {
@@ -129,9 +130,36 @@ const TeamManagement: React.FC = () => {
 
   const filterOptions: FilterStatus[] = ["All", "Active", "Inactive"];
 
-  const deactivateUser = () => {
-    console.log("User deactivated:", selectedUser);
-    setOpen(true);
+  const deactivateUser = async () => {
+    try {
+      const response = await statsUpdate({
+        companyId: id,
+        memberId: selectedUser?.id,
+        payload: {
+          status:
+            selectedUser?.companyMember?.status === "active"
+              ? "inactive"
+              : "active",
+        },
+      }).unwrap();
+      setOpen(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // delete fucntion
+  const handleDelete = async () => {
+    console.log(selectedItem, id);
+    try {
+      const response = await deleteMember({
+        companyId: id,
+        memberId: selectedItem,
+      }).unwrap();
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -271,14 +299,22 @@ const TeamManagement: React.FC = () => {
                     </td>
                     <td className="whitespace-nowrap px-6 py-4">
                       <button
-                        onClick={deactivateUser}
+                        onClick={() => {
+                          setOpen(true);
+                          setSelectedUser(user);
+                        }}
                         className={`rounded-md px-3 py-2 text-xs font-medium ${getStatusColor(user.companyMember.status)}`}
                       >
                         {user.companyMember.status}
                       </button>
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 text-center">
-                      <button>
+                      <button
+                        onClick={() => {
+                          setSelectedItem(user.id);
+                          setIsDeleteOpen(true);
+                        }}
+                      >
                         <Trash2 />
                       </button>
                     </td>
@@ -293,6 +329,16 @@ const TeamManagement: React.FC = () => {
         isOpen={open}
         onClose={() => setOpen(false)}
         onConfirm={deactivateUser}
+      />
+      <DeleteConfirmModal
+        isOpen={isDeleteOpen}
+        onClose={() => setIsDeleteOpen(false)}
+        onConfirm={handleDelete}
+        title="Raw Materials"
+        message="Are you sure you want to delete this project? This action cannot be undone."
+        confirmText="Yes, Delete"
+        cancelText="No, Cancel"
+        isLoading={DeleteLoading}
       />
     </div>
   );
