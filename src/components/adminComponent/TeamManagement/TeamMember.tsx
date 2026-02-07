@@ -326,6 +326,7 @@ const TeamManagement: React.FC = () => {
         </div>
       </div>
       <DeactivateModal
+        isLoading={StatsLoading}
         isOpen={open}
         onClose={() => setOpen(false)}
         onConfirm={deactivateUser}
