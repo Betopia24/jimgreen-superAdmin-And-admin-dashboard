@@ -1,4 +1,6 @@
 "use client";
+import { useGetsuperAdminUsermanagementSingleQuery } from "@/redux/api/super-admin/userManagement/superAdminUserManagementlicApi";
+import LoadingPage from "@/share/loading/LoadingPage";
 import {
   Mail,
   Phone,
@@ -8,6 +10,7 @@ import {
   CreditCard,
   Activity,
 } from "lucide-react";
+import moment from "moment";
 import { useSearchParams } from "next/navigation";
 interface UserProfileProps {
   user?: {
@@ -23,10 +26,35 @@ interface UserProfileProps {
   };
 }
 
+export interface CompanyMember {
+  id: string;
+  companyId: string;
+  role: "owner" | "admin" | "member";
+  status: "active" | "inactive";
+}
+
+export interface UserDetails {
+  id: string;
+  firstName: string;
+  lastName: string;
+  tier: "FREE" | "PRO" | "ENTERPRISE";
+  email: string;
+  avatar: string | null;
+  role: "USER" | "ADMIN" | "SUPER_ADMIN";
+  status: "UNBLOCK" | "BLOCK";
+  createdAt: string; // ISO date string
+  updatedAt: string; // ISO date string
+  companyMember: CompanyMember;
+  phone?: string;
+  location?: string;
+}
+
 const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
-  console.log(id);
+
+  const { data, isLoading } = useGetsuperAdminUsermanagementSingleQuery(id);
+  console.log(data);
   const defaultUser = {
     name: "Lebron James",
     email: "Lebronjames003@gmail.com",
@@ -40,7 +68,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
     status: "active" as const,
   };
 
-  const userData = user || defaultUser;
+  const userData = data?.data as UserDetails;
 
   const handleSuspend = () => {
     console.log("Suspend user clicked");
@@ -49,6 +77,10 @@ const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
   const handleBan = () => {
     console.log("Ban account clicked");
   };
+
+  if (isLoading) {
+    return <LoadingPage />;
+  }
 
   return (
     <div className="min-h-screen">
@@ -60,13 +92,16 @@ const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
               {/* Avatar */}
               <div className="relative flex-shrink-0">
                 <img
-                  src={userData.avatar}
-                  alt={userData.name}
+                  src={
+                    userData.avatar ||
+                    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop"
+                  }
+                  alt={userData.firstName}
                   className="h-28 w-28 rounded-full border-4 border-gray-100 object-cover sm:h-32 sm:w-32 lg:h-40 lg:w-40"
                 />
                 <div
                   className={`absolute bottom-1 right-1 h-4 w-4 rounded-full border-2 border-white sm:bottom-2 sm:right-2 sm:h-5 sm:w-5 sm:border-4 ${
-                    userData.status === "active"
+                    userData.companyMember.status === "active"
                       ? "bg-green-500"
                       : "bg-gray-400"
                   }`}
@@ -76,7 +111,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
               {/* User Info */}
               <div className="w-full space-y-3 text-center sm:w-auto sm:text-left">
                 <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">
-                  {userData.name}
+                  {userData.firstName} {userData.lastName}
                 </h1>
 
                 <div className="space-y-2">
@@ -88,12 +123,14 @@ const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
                   </div>
                   <div className="flex items-center justify-center gap-2 text-gray-600 sm:justify-start">
                     <Phone className="h-4 w-4 flex-shrink-0" />
-                    <span className="text-xs sm:text-sm">{userData.phone}</span>
+                    <span className="text-xs sm:text-sm">
+                      {userData.phone || "03838373736"}
+                    </span>
                   </div>
                   <div className="flex items-center justify-center gap-2 text-gray-600 sm:justify-start">
                     <MapPin className="h-4 w-4 flex-shrink-0" />
                     <span className="text-xs sm:text-sm">
-                      {userData.location}
+                      {userData.location || "Dhaka BanglaDash"}
                     </span>
                   </div>
                 </div>
@@ -131,7 +168,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
               </span>
             </div>
             <p className="ml-10 text-lg font-semibold text-indigo-600 sm:ml-11 sm:text-2xl">
-              {userData.createdDate}
+              {moment(userData.createdAt).format("MMM Do YY")}
             </p>
           </div>
 
@@ -146,7 +183,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
               </span>
             </div>
             <p className="ml-10 text-lg font-semibold text-primary sm:ml-11 sm:text-2xl">
-              {userData.lastActive}
+              {moment(userData.updatedAt).startOf("day").fromNow()}
             </p>
           </div>
 
@@ -161,7 +198,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
               </span>
             </div>
             <p className="ml-10 text-lg font-semibold text-primary sm:ml-11 sm:text-2xl">
-              {userData.subscription}
+              {userData.tier}
             </p>
           </div>
 
@@ -176,7 +213,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
               </span>
             </div>
             <p className="ml-10 text-lg font-semibold capitalize text-green-600 sm:ml-11 sm:text-2xl">
-              {userData.status}
+              {userData.companyMember.status}
             </p>
           </div>
         </div>
