@@ -208,7 +208,7 @@ const TeamManagement: React.FC = () => {
                 />
               </div>
               <div className="relative">
-                <button
+                {/* <button
                   onClick={() => setShowFilterMenu(!showFilterMenu)}
                   className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-300 px-4 py-2 transition-colors hover:bg-gray-50"
                 >
@@ -216,7 +216,7 @@ const TeamManagement: React.FC = () => {
                   <span className="text-sm font-medium text-gray-700">
                     {filterStatus}
                   </span>
-                </button>
+                </button> */}
 
                 {showFilterMenu && (
                   <div className="absolute right-0 z-10 mt-2 w-48 rounded-lg border border-gray-200 bg-white shadow-lg">

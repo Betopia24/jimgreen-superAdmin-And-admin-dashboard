@@ -27,7 +27,9 @@ const DeactivateModal: React.FC<DeactivateModalProps> = ({
         </div>
 
         {/* Title */}
-        <h2 className="text-center text-xl font-semibold">Deactivate User?</h2>
+        <h2 className="text-center text-xl font-semibold">
+          Deactivate Member?
+        </h2>
 
         {/* Description */}
         <p className="mt-2 text-center text-sm text-gray-600">
