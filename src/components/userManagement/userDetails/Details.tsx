@@ -11,7 +11,7 @@ import {
   Activity,
 } from "lucide-react";
 import moment from "moment";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 interface UserProfileProps {
   user?: {
     name: string;
@@ -50,23 +50,11 @@ export interface UserDetails {
 }
 
 const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
 
   const { data, isLoading } = useGetsuperAdminUsermanagementSingleQuery(id);
-  console.log(data);
-  const defaultUser = {
-    name: "Lebron James",
-    email: "Lebronjames003@gmail.com",
-    phone: "+8801638148194",
-    location: "California, USA",
-    avatar:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop",
-    createdDate: "Jan 15, 2024",
-    lastActive: "2 min ago",
-    subscription: "Enterprise",
-    status: "active" as const,
-  };
 
   const userData = data?.data as UserDetails;
 
@@ -140,17 +128,17 @@ const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
             {/* Action Buttons */}
             <div className="flex w-full flex-col gap-3 sm:flex-row lg:w-auto">
               <button
-                onClick={handleSuspend}
+                onClick={() => router.back()}
                 className="w-full rounded-lg border border-red-200 bg-white px-4 py-2.5 text-xs font-medium text-red-600 transition-colors hover:bg-red-50 sm:w-auto sm:px-6 sm:text-sm"
               >
-                Suspend User
+                Back to Page
               </button>
-              <button
+              {/* <button
                 onClick={handleBan}
                 className="w-full rounded-lg bg-red-600 px-4 py-2.5 text-xs font-medium text-white transition-colors hover:bg-red-700 sm:w-auto sm:px-6 sm:text-sm"
               >
                 Ban Account
-              </button>
+              </button> */}
             </div>
           </div>
         </div>
