@@ -171,11 +171,13 @@ const TeamManagement: React.FC = () => {
             </p>
           </div>
           <div>
-            <button className="flex gap-2 rounded-md bg-primary px-8 py-3 text-lg font-medium text-white">
-              {" "}
+            <Link
+              href={"/admin/team-management/add-member"}
+              className="flex gap-2 rounded-md bg-primary px-8 py-3 text-lg font-medium text-white"
+            >
               <Plus />
               Add Team Member
-            </button>
+            </Link>
           </div>
         </div>
 
