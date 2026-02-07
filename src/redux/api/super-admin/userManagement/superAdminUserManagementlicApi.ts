@@ -16,8 +16,17 @@ export const superAdminUserManagementApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
+
+    getsuperAdminUsermanagementSingle: builder.query({
+      query: (id) => ({
+        url: `/users/${id}`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
-export const { useGetsuperAdminUsermanagementQuery } =
-  superAdminUserManagementApi;
+export const {
+  useGetsuperAdminUsermanagementQuery,
+  useGetsuperAdminUsermanagementSingleQuery,
+} = superAdminUserManagementApi;

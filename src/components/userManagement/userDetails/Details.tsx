@@ -8,7 +8,7 @@ import {
   CreditCard,
   Activity,
 } from "lucide-react";
-
+import { useSearchParams } from "next/navigation";
 interface UserProfileProps {
   user?: {
     name: string;
@@ -24,6 +24,9 @@ interface UserProfileProps {
 }
 
 const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
+  console.log(id);
   const defaultUser = {
     name: "Lebron James",
     email: "Lebronjames003@gmail.com",

@@ -357,7 +357,7 @@ const UserManagement: React.FC = () => {
                           <div className="absolute right-0 z-10 mt-2 w-48 rounded-lg border border-gray-200 bg-white shadow-lg">
                             <div className="py-2">
                               <Link
-                                href={"/user-management/details"}
+                                href={`/super-admin/user-management/details?id=${user.id}`}
                                 className="flex w-full items-center gap-2 px-4 py-2 text-left transition-colors hover:bg-gray-50"
                               >
                                 <User className="h-4 w-4" />
