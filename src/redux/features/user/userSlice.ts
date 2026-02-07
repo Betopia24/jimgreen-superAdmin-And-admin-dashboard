@@ -1,9 +1,8 @@
-import { UserProfile } from "@/interfaces/global";
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState: {
-  user: UserProfile | null;
-  token: string | null;
+  user: null;
+  token: null;
 } = {
   user: null,
   token: null,
