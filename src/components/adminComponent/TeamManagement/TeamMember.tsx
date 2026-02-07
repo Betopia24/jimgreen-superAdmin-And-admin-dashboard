@@ -15,79 +15,60 @@ import {
 import Link from "next/link";
 import DeactivateModal from "./Modal";
 import { useGetsuperAdminUsermanagementQuery } from "@/redux/api/super-admin/userManagement/superAdminUserManagementlicApi";
+import { useGetAllTeamMembersQuery } from "@/redux/api/teamMember/teamMemberSliceApi";
+import { useGetMeProfileQuery } from "@/redux/api/getMe/getMeApi";
 
-interface User {
-  id: number;
-  name: string;
+// interface User {
+//   id: number;
+//   name: string;
+//   email: string;
+//   subscription: "Enterprise" | "Pro" | "Free";
+//   createdDate: string;
+//   lastActive: string;
+//   status: "Active" | "Inactive" | "Suspended";
+// }
+
+export interface User {
+  id: string;
+  firstName: string;
+  lastName: string;
   email: string;
-  subscription: "Enterprise" | "Pro" | "Free";
-  createdDate: string;
-  lastActive: string;
-  status: "Active" | "Inactive" | "Suspended";
+  avatar: string | null;
+  isEmailVerified: boolean;
+  role: "USER";
+  status: "UNBLOCK";
+  createdAt: string; // ISO date string
+  updatedAt: string; // ISO date string
+  companyMember: {
+    role: "owner";
+    companyId: string;
+    status: "active";
+  };
 }
 
-type FilterStatus = "All" | "Active" | "Inactive" | "Suspended";
+export interface CompanyMember {
+  role: "owner" | "member";
+  status: "active" | "inactive";
+  companyId: string;
+}
+
+export interface TeamMember {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  avatar: string | null;
+  createdAt: string;
+  updatedAt: string;
+  companyMember: CompanyMember;
+}
+
+type FilterStatus = "All" | "Active" | "Inactive";
 
 const TeamManagement: React.FC = () => {
   const [open, setOpen] = useState(false);
-  const { data, isLoading } = useGetsuperAdminUsermanagementQuery("");
-  const [users, setUsers] = useState<User[]>([
-    {
-      id: 1,
-      name: "Dianne Russell",
-      email: "felicia.reid@example.com",
-      subscription: "Enterprise",
-      createdDate: "23",
-      lastActive: "2 min ago",
-      status: "Active",
-    },
-    {
-      id: 2,
-      name: "Albert Flores",
-      email: "debra.holt@example.com",
-      subscription: "Pro",
-      createdDate: "312",
-      lastActive: "2 min ago",
-      status: "Active",
-    },
-    {
-      id: 3,
-      name: "Darrell Steward",
-      email: "tanya.hill@example.com",
-      subscription: "Free",
-      createdDate: "324",
-      lastActive: "2 min ago",
-      status: "Active",
-    },
-    {
-      id: 4,
-      name: "Jacob Jones",
-      email: "debra.holt@example.com",
-      subscription: "Pro",
-      createdDate: "23",
-      lastActive: "2 min ago",
-      status: "Inactive",
-    },
-    {
-      id: 5,
-      name: "Floyd Miles",
-      email: "felicia.reid@example.com",
-      subscription: "Enterprise",
-      createdDate: "23",
-      lastActive: "2 min ago",
-      status: "Active",
-    },
-    {
-      id: 6,
-      name: "Kristin Watson",
-      email: "sara.cruz@example.com",
-      subscription: "Free",
-      createdDate: "345",
-      lastActive: "2 min ago",
-      status: "Suspended",
-    },
-  ]);
 
+  const { data, isLoading: profielLoading } = useGetMeProfileQuery("");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [filterStatus, setFilterStatus] = useState<FilterStatus>("All");
   const [showFilterMenu, setShowFilterMenu] = useState<boolean>(false);
@@ -95,38 +76,39 @@ const TeamManagement: React.FC = () => {
   const [showDetailsModal, setShowDetailsModal] = useState<boolean>(false);
   const [activeActionMenu, setActiveActionMenu] = useState<number | null>(null);
 
-  const filteredUsers = users.filter((user: User) => {
-    const matchesSearch =
-      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesFilter =
-      filterStatus === "All" || user.status === filterStatus;
-    return matchesSearch && matchesFilter;
+  const userProfile = data?.data as User;
+  const id = userProfile?.companyMember?.companyId;
+
+  const { data: memberData, isLoading } = useGetAllTeamMembersQuery(id);
+  const members: TeamMember[] = memberData?.data ?? [];
+  const [users, setUsers] = useState(members);
+
+  const filteredUsers = members.filter((user) => {
+    const fullName = `${user.firstName} ${user.lastName}`.toLowerCase();
+
+    return (
+      fullName.includes(searchTerm.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchTerm.toLowerCase())
+    );
   });
 
-  const getStatusColor = (status: User["status"]): string => {
-    switch (status) {
-      case "Active":
-        return "bg-green-100 text-green-700";
-      case "Inactive":
-        return "bg-gray-100 text-gray-700";
-      case "Suspended":
-        return "bg-red-100 text-red-700";
-      default:
-        return "bg-gray-100 text-gray-700";
-    }
-  };
+  // const filteredUsers = users.filter((user: User) => {
+  //   const matchesSearch =
+  //     user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //     user.email.toLowerCase().includes(searchTerm.toLowerCase());
+  //   const matchesFilter =
+  //     filterStatus === "All" || user.status === filterStatus;
+  //   return matchesSearch && matchesFilter;
+  // });
 
-  const getSubscriptionColor = (subscription: User["subscription"]): string => {
-    switch (subscription) {
-      case "Enterprise":
-        return "bg-gray-800 text-white";
-      case "Pro":
-        return "bg-gray-300 text-block ";
-      case "Free":
-        return "bg-gray-50 text-gray-700 border";
+  const getStatusColor = (status: "active" | "inactive"): string => {
+    switch (status) {
+      case "active":
+        return "bg-green-100 text-green-700";
+      case "inactive":
+        return "bg-gray-100 text-gray-700";
       default:
-        return "bg-gray-300 text-gray-700";
+        return "bg-gray-100 text-gray-700";
     }
   };
 
@@ -136,21 +118,16 @@ const TeamManagement: React.FC = () => {
     setActiveActionMenu(null);
   };
 
-  const handleSuspendUser = (userId: number): void => {
+  const handleSuspendUser = (userId: string): void => {
     setUsers(
-      users.map((user: User) =>
+      users.map((user: TeamMember) =>
         user.id === userId ? { ...user, status: "Suspended" as const } : user,
       ),
     );
     setActiveActionMenu(null);
   };
 
-  const filterOptions: FilterStatus[] = [
-    "All",
-    "Active",
-    "Inactive",
-    "Suspended",
-  ];
+  const filterOptions: FilterStatus[] = ["All", "Active", "Inactive"];
 
   const deactivateUser = () => {
     console.log("User deactivated:", selectedUser);
@@ -265,7 +242,7 @@ const TeamManagement: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 bg-white">
-                {filteredUsers.map((user: User) => (
+                {filteredUsers.map((user: TeamMember) => (
                   <tr
                     key={user.id}
                     className="transition-colors hover:bg-gray-50"
@@ -274,11 +251,11 @@ const TeamManagement: React.FC = () => {
                       <div className="flex items-center gap-3">
                         <div className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-100">
                           <span className="text-sm font-semibold text-indigo-700">
-                            {user.name.charAt(0)}
+                            {user.firstName.charAt(0)}
                           </span>
                         </div>
                         <span className="font-medium text-gray-900">
-                          {user.name}
+                          {user.firstName} {user.lastName}
                         </span>
                       </div>
                     </td>
@@ -287,17 +264,17 @@ const TeamManagement: React.FC = () => {
                     </td>
 
                     <td className="whitespace-nowrap px-6 py-4 text-gray-600">
-                      {user.createdDate}
+                      {new Date(user.createdAt).toLocaleDateString()}
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 text-gray-600">
-                      {user.lastActive}
+                      {new Date(user.createdAt).toLocaleDateString()}
                     </td>
                     <td className="whitespace-nowrap px-6 py-4">
                       <button
                         onClick={deactivateUser}
-                        className={`rounded-md px-3 py-2 text-xs font-medium ${getStatusColor(user.status)}`}
+                        className={`rounded-md px-3 py-2 text-xs font-medium ${getStatusColor(user.companyMember.status)}`}
                       >
-                        {user.status}
+                        {user.companyMember.status}
                       </button>
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 text-center">
@@ -311,110 +288,6 @@ const TeamManagement: React.FC = () => {
             </table>
           </div>
         </div>
-
-        {/* Details Modal */}
-        {showDetailsModal && selectedUser && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
-            <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-white shadow-xl">
-              <div className="flex items-center justify-between border-b border-gray-200 p-6">
-                <h2 className="text-2xl font-bold text-gray-900">
-                  User Details
-                </h2>
-                <button
-                  onClick={() => setShowDetailsModal(false)}
-                  className="rounded-lg p-2 transition-colors hover:bg-gray-100"
-                >
-                  <X className="h-6 w-6 text-gray-600" />
-                </button>
-              </div>
-
-              <div className="p-6">
-                <div className="mb-6 flex items-center gap-4">
-                  <div className="flex h-20 w-20 items-center justify-center rounded-full bg-indigo-100">
-                    <span className="text-3xl font-bold text-indigo-700">
-                      {selectedUser.name.charAt(0)}
-                    </span>
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold text-gray-900">
-                      {selectedUser.name}
-                    </h3>
-                    <p className="text-gray-600">{selectedUser.email}</p>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                  <div className="rounded-lg bg-gray-50 p-4">
-                    <div className="mb-2 flex items-center gap-2">
-                      <Shield className="h-5 w-5 text-gray-600" />
-                      <span className="text-sm font-medium text-gray-600">
-                        Subscription
-                      </span>
-                    </div>
-                    <span
-                      className={`inline-block rounded-full px-3 py-1 text-sm font-medium ${getSubscriptionColor(selectedUser.subscription)}`}
-                    >
-                      {selectedUser.subscription}
-                    </span>
-                  </div>
-
-                  <div className="rounded-lg bg-gray-50 p-4">
-                    <div className="mb-2 flex items-center gap-2">
-                      <User className="h-5 w-5 text-gray-600" />
-                      <span className="text-sm font-medium text-gray-600">
-                        Status
-                      </span>
-                    </div>
-                    <span
-                      className={`inline-block rounded-full px-3 py-1 text-sm font-medium ${getStatusColor(selectedUser.status)}`}
-                    >
-                      {selectedUser.status}
-                    </span>
-                  </div>
-
-                  <div className="rounded-lg bg-gray-50 p-4">
-                    <div className="mb-2 flex items-center gap-2">
-                      <Calendar className="h-5 w-5 text-gray-600" />
-                      <span className="text-sm font-medium text-gray-600">
-                        Created Date
-                      </span>
-                    </div>
-                    <p className="font-semibold text-gray-900">
-                      {selectedUser.createdDate}
-                    </p>
-                  </div>
-
-                  <div className="rounded-lg bg-gray-50 p-4">
-                    <div className="mb-2 flex items-center gap-2">
-                      <Clock className="h-5 w-5 text-gray-600" />
-                      <span className="text-sm font-medium text-gray-600">
-                        Last Active
-                      </span>
-                    </div>
-                    <p className="font-semibold text-gray-900">
-                      {selectedUser.lastActive}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="mt-6 flex gap-3">
-                  <button className="flex-1 rounded-lg bg-blue-600 px-4 py-2 font-medium text-white transition-colors hover:bg-blue-700">
-                    Edit User
-                  </button>
-                  <button
-                    onClick={() => {
-                      handleSuspendUser(selectedUser.id);
-                      setShowDetailsModal(false);
-                    }}
-                    className="flex-1 rounded-lg bg-red-600 px-4 py-2 font-medium text-white transition-colors hover:bg-red-700"
-                  >
-                    Suspend User
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
       <DeactivateModal
         isOpen={open}

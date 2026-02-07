@@ -26,9 +26,9 @@ export const teamMemberManagementApi = baseApi.injectEndpoints({
       invalidatesTags: ["UserManagement"],
     }),
 
-    getsuperAdminUsermanagement: builder.query({
-      query: () => ({
-        url: `/users`,
+    getAllTeamMembers: builder.query({
+      query: (id) => ({
+        url: `/company/${id}/members`,
         method: "GET",
       }),
       providesTags: ["UserManagement"],
@@ -44,4 +44,5 @@ export const teamMemberManagementApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useCreateTeamMemberMutation } = teamMemberManagementApi;
+export const { useCreateTeamMemberMutation, useGetAllTeamMembersQuery } =
+  teamMemberManagementApi;

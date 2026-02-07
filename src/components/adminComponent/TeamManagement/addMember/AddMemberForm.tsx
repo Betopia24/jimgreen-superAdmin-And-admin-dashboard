@@ -2,17 +2,59 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Mail, Lock, User, ChevronDown, Eye, EyeOff } from "lucide-react";
+import {
+  Mail,
+  Lock,
+  User,
+  ChevronDown,
+  Eye,
+  EyeOff,
+  LoaderCircle,
+} from "lucide-react";
+import { useCreateTeamMemberMutation } from "@/redux/api/teamMember/teamMemberSliceApi";
+import { useGetMeProfileQuery } from "@/redux/api/getMe/getMeApi";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import LoadingPage from "@/share/loading/LoadingPage";
 
 interface AddUserFormData {
   firstName: string;
   lastName: string;
   email: string;
   password: string;
+  role?: string;
+}
+
+export type Error = {
+  data: {
+    message: string;
+  };
+};
+
+export interface User {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  avatar: string | null;
+  isEmailVerified: boolean;
+  role: "USER";
+  status: "UNBLOCK";
+  createdAt: string; // ISO date string
+  updatedAt: string; // ISO date string
+  companyMember: {
+    role: "owner";
+    companyId: string;
+    status: "active";
+  };
 }
 
 export default function AddMemberForm() {
   const [showPassword, setShowPassword] = useState(false);
+
+  const [createMemner, { isLoading }] = useCreateTeamMemberMutation();
+  const { data, isLoading: profielLoading } = useGetMeProfileQuery("");
+  const route = useRouter();
 
   const {
     register,
@@ -28,13 +70,38 @@ export default function AddMemberForm() {
     },
   });
 
-  const onSubmit = (data: AddUserFormData) => {
-    console.log("Form Data:", data);
-    // Handle form submission here
-    alert("User added successfully!");
-    reset();
-  };
+  const userProfile = data?.data as User;
+  const onSubmit = async (data: any) => {
+    console.log(userProfile?.companyMember?.companyId);
+    if (!userProfile?.companyMember?.companyId) {
+      console.error("Company ID is missing");
+      return;
+    }
 
+    const payload = {
+      ...data,
+    };
+    console.log(" payloadForm Data: ", payload);
+
+    try {
+      const response = await createMemner({
+        id: userProfile?.companyMember?.companyId,
+        payload,
+      }).unwrap();
+      console.log(response);
+      if (response?.success) {
+        toast.success(response?.message);
+        // route.push("/dashboard/rowMeterials");
+      }
+    } catch (error) {
+      console.log(error);
+      const err = error as Error;
+      toast.error(err?.data?.message);
+    }
+  };
+  if (profielLoading) {
+    return <LoadingPage />;
+  }
   return (
     <div className="">
       <div className="">
@@ -223,9 +290,7 @@ export default function AddMemberForm() {
                 <select
                   {...register("role", { required: "Role is required" })}
                   id="role"
-                  className={`block w-full appearance-none border py-3 pl-4 pr-10 ${
-                    errors.role ? "border-red-300" : "border-gray-300"
-                  } cursor-pointer rounded-lg bg-gray-50 text-sm text-gray-700 outline-none transition-all focus:border-transparent focus:ring-2 focus:ring-blue-500 sm:text-base`}
+                  className={`block w-full cursor-pointer appearance-none rounded-lg border bg-gray-50 py-3 pl-4 pr-10 text-sm text-gray-700 outline-none transition-all focus:border-transparent focus:ring-2 focus:ring-blue-500 sm:text-base`}
                 >
                   <option value="user">User</option>
                 </select>
@@ -233,25 +298,22 @@ export default function AddMemberForm() {
                   <ChevronDown className="h-5 w-5 text-gray-400" />
                 </div>
               </div>
-              {errors.role && (
-                <p className="mt-1 text-sm text-red-600">
-                  {errors.role.message}
-                </p>
-              )}
             </div>
 
             {/* Submit Button */}
             <div className="flex justify-end gap-5 pt-4">
               <button
-                type="submit"
+                type="button"
+                onClick={() => route.back()}
                 className="0 w-full rounded-lg bg-gray-300 px-8 py-3 text-sm font-medium text-black shadow-lg transition-all duration-200 hover:bg-gray-400 hover:shadow-xl focus:outline-none focus:ring-2 sm:w-auto sm:text-base"
               >
                 Back
               </button>
               <button
                 type="submit"
-                className="w-full rounded-lg bg-blue-600 px-8 py-3 text-sm font-medium text-white shadow-lg transition-all duration-200 hover:bg-blue-700 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:w-auto sm:text-base"
+                className="flex w-full gap-2 rounded-lg bg-blue-600 px-8 py-3 text-sm font-medium text-white shadow-lg transition-all duration-200 hover:bg-blue-700 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:w-auto sm:text-base"
               >
+                {isLoading && <LoaderCircle className="animate-spin" />}
                 Add New User
               </button>
             </div>
