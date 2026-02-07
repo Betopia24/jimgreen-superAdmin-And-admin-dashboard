@@ -1,4 +1,4 @@
-import TeamManagement from "@/components/adminComponent/userManagement/Users";
+import TeamManagement from "@/components/adminComponent/TeamManagement/TeamMember";
 import React from "react";
 
 const page = () => {

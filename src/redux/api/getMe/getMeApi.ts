@@ -1,4 +1,3 @@
-import { UserProfile } from "@/interfaces/global";
 import baseApi from "../baseApi";
 
 export const getMe = baseApi.injectEndpoints({

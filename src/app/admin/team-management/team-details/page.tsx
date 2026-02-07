@@ -1,4 +1,4 @@
-import TeamDetails from "@/components/adminComponent/userManagement/userDetails/Details";
+import TeamDetails from "@/components/adminComponent/TeamManagement/userDetails/Details";
 import React from "react";
 
 const page = () => {

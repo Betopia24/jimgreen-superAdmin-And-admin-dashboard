@@ -9,9 +9,19 @@ import {
   Calendar,
   Clock,
   Shield,
+  Delete,
+  Trash,
+  Trash2,
+  LoaderCircle,
 } from "lucide-react";
 import Link from "next/link";
-import { useGetsuperAdminUsermanagementQuery } from "@/redux/api/super-admin/userManagement/superAdminUserManagementlicApi";
+import {
+  useDeleteUserMutation,
+  useGetsuperAdminUsermanagementQuery,
+  useUserSuspendMutation,
+} from "@/redux/api/super-admin/userManagement/superAdminUserManagementlicApi";
+import DeleteConfirmModal from "@/share/DeteleConfirm/DeleteConfirm";
+import { toast } from "sonner";
 
 export type UserStatus = "BLOCK" | "UNBLOCK";
 export type UserRole = "USER" | "ADMIN" | "SUPER_ADMIN";
@@ -21,7 +31,7 @@ export interface CompanyMember {
   id: string;
   companyId: string;
   role: "owner" | "member";
-  status: "active" | "inactive";
+  status: "active" | "blocked";
 }
 
 export interface ApiUser {
@@ -39,7 +49,7 @@ export interface ApiUser {
 }
 
 // export type UIUserStatus = "Active" | "Inactive" | "Suspended";
-export type FilterStatus = "All" | "Active" | "Inactive" | "Suspended";
+export type FilterStatus = "All" | "Active" | "blocked";
 
 export interface UIUser {
   id: string;
@@ -58,77 +68,25 @@ const mapApiUserToUIUser = (user: ApiUser): UIUser => ({
   subscription: user.tier,
   createdDate: new Date(user.createdAt).toLocaleDateString(),
   lastActive: new Date(user.updatedAt).toLocaleDateString(),
-  status: user.status === "UNBLOCK" ? "Active" : "Suspended",
+  status: user.status === "UNBLOCK" ? "Active" : "blocked",
 });
 
 const UserManagement: React.FC = () => {
   const { data, isLoading } = useGetsuperAdminUsermanagementQuery("");
+  const [deleteUserPost, { isLoading: DeleteLoading }] =
+    useDeleteUserMutation();
+  const [accountSuspendPost, { isLoading: suspendLoading }] =
+    useUserSuspendMutation();
   console.log(data);
   const [users, setUsers] = useState<UIUser[]>([]);
-  // const [users, setUsers] = useState<User[]>(data?.data || []);
-  // const [users, setUsers] = useState<User[]>([
-  //   {
-  //     id: 1,
-  //     name: "Dianne Russell",
-  //     email: "felicia.reid@example.com",
-  //     subscription: "Enterprise",
-  //     createdDate: "Jan 16, 2024",
-  //     lastActive: "2 min ago",
-  //     status: "Active",
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "Albert Flores",
-  //     email: "debra.holt@example.com",
-  //     subscription: "Pro",
-  //     createdDate: "Feb 3, 2024",
-  //     lastActive: "2 min ago",
-  //     status: "Active",
-  //   },
-  //   {
-  //     id: 3,
-  //     name: "Darrell Steward",
-  //     email: "tanya.hill@example.com",
-  //     subscription: "Free",
-  //     createdDate: "Mar 12, 2024",
-  //     lastActive: "2 min ago",
-  //     status: "Active",
-  //   },
-  //   {
-  //     id: 4,
-  //     name: "Jacob Jones",
-  //     email: "debra.holt@example.com",
-  //     subscription: "Pro",
-  //     createdDate: "Jan 28, 2024",
-  //     lastActive: "2 min ago",
-  //     status: "Inactive",
-  //   },
-  //   {
-  //     id: 5,
-  //     name: "Floyd Miles",
-  //     email: "felicia.reid@example.com",
-  //     subscription: "Enterprise",
-  //     createdDate: "Apr 5, 2024",
-  //     lastActive: "2 min ago",
-  //     status: "Active",
-  //   },
-  //   {
-  //     id: 6,
-  //     name: "Kristin Watson",
-  //     email: "sara.cruz@example.com",
-  //     subscription: "Free",
-  //     createdDate: "May 20, 2024",
-  //     lastActive: "2 min ago",
-  //     status: "Suspended",
-  //   },
-  // ]);
 
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [filterStatus, setFilterStatus] = useState<FilterStatus>("All");
   const [showFilterMenu, setShowFilterMenu] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<UIUser | null>(null);
   const [showDetailsModal, setShowDetailsModal] = useState<boolean>(false);
-  // const [activeActionMenu, setActiveActionMenu] = useState<number | null>(null);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<string | null>(null);
 
   const [activeActionMenu, setActiveActionMenu] = useState<string | null>(null);
 
@@ -143,7 +101,6 @@ const UserManagement: React.FC = () => {
 
   useEffect(() => {
     if (!data?.data) return;
-
     setUsers(data.data.map(mapApiUserToUIUser));
   }, [data]);
 
@@ -151,10 +108,8 @@ const UserManagement: React.FC = () => {
     switch (status) {
       case "Active":
         return "bg-green-100 text-green-700";
-      case "Inactive":
+      case "blocked":
         return "bg-gray-100 text-gray-700";
-      case "Suspended":
-        return "bg-red-100 text-red-700";
       default:
         return "bg-gray-100 text-gray-700";
     }
@@ -173,10 +128,12 @@ const UserManagement: React.FC = () => {
     }
   };
 
-  const handleSuspendUser = (userId: string) => {
-    setUsers((prev) =>
-      prev.map((u) => (u.id === userId ? { ...u, status: "Suspended" } : u)),
-    );
+  const handleSuspendUser = async (userId: string) => {
+    try {
+      const response = await accountSuspendPost(userId).unwrap();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleViewDetails = (user: UIUser): void => {
@@ -185,21 +142,17 @@ const UserManagement: React.FC = () => {
     setActiveActionMenu(null);
   };
 
-  // const handleSuspendUser = (userId: number): void => {
-  //   setUsers(
-  //     users.map((user: User) =>
-  //       user.id === userId ? { ...user, status: "Suspended" as const } : user,
-  //     ),
-  //   );
-  //   setActiveActionMenu(null);
-  // };
+  const filterOptions: FilterStatus[] = ["All", "Active", "blocked"];
 
-  const filterOptions: FilterStatus[] = [
-    "All",
-    "Active",
-    "Inactive",
-    "Suspended",
-  ];
+  const handleDelete = async () => {
+    console.log(selectedItem);
+    try {
+      const response = await deleteUserPost(selectedItem).unwrap();
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="min-h-screen">
@@ -357,7 +310,7 @@ const UserManagement: React.FC = () => {
                           <div className="absolute right-0 z-10 mt-2 w-48 rounded-lg border border-gray-200 bg-white shadow-lg">
                             <div className="py-2">
                               <Link
-                                href={"/user-management/details"}
+                                href={`/super-admin/user-management/details?id=${user.id}`}
                                 className="flex w-full items-center gap-2 px-4 py-2 text-left transition-colors hover:bg-gray-50"
                               >
                                 <User className="h-4 w-4" />
@@ -365,10 +318,29 @@ const UserManagement: React.FC = () => {
                               </Link>
                               <button
                                 onClick={() => handleSuspendUser(user.id)}
+                                className="flex w-full items-center gap-2 px-4 py-2 text-left text-yellow-500 transition-colors hover:bg-gray-50"
+                              >
+                                {suspendLoading ? (
+                                  <>
+                                    <LoaderCircle className="animate-spin" />
+                                  </>
+                                ) : (
+                                  <>
+                                    <Shield className="h-4 w-4" />
+                                  </>
+                                )}
+
+                                <span>Suspend User</span>
+                              </button>
+                              <button
+                                onClick={() => {
+                                  setSelectedItem(user.id);
+                                  setIsDeleteOpen(true);
+                                }}
                                 className="flex w-full items-center gap-2 px-4 py-2 text-left text-red-600 transition-colors hover:bg-gray-50"
                               >
-                                <Shield className="h-4 w-4" />
-                                <span>Suspend User</span>
+                                <Trash2 className="h-4 w-4" />
+                                <span>Delete account</span>
                               </button>
                             </div>
                           </div>
@@ -486,6 +458,17 @@ const UserManagement: React.FC = () => {
           </div>
         )}
       </div>
+
+      <DeleteConfirmModal
+        isOpen={isDeleteOpen}
+        onClose={() => setIsDeleteOpen(false)}
+        onConfirm={handleDelete}
+        title="Raw Materials"
+        message="Are you sure you want to delete this project? This action cannot be undone."
+        confirmText="Yes, Delete"
+        cancelText="No, Cancel"
+        isLoading={DeleteLoading}
+      />
     </div>
   );
 };
