@@ -5,11 +5,13 @@ export type PlanType = "monthly" | "annually";
 interface PaymentState {
   planId: string;
   planType: PlanType | null;
+  clientSecret: string | null;
 }
 
 const initialState: PaymentState = {
   planId: "",
   planType: null,
+  clientSecret: null,
 };
 
 const paymentSlice = createSlice({
@@ -24,9 +26,14 @@ const paymentSlice = createSlice({
       state.planType = action.payload.planType;
     },
 
+    // NEW: store client secret
+    setClientSecret: (state, action: PayloadAction<string>) => {
+      console.log(action.payload);
+      state.clientSecret = action.payload;
+    },
     resetPlan: () => initialState,
   },
 });
 
-export const { setPlan, resetPlan } = paymentSlice.actions;
+export const { setPlan, resetPlan, setClientSecret } = paymentSlice.actions;
 export default paymentSlice.reducer;

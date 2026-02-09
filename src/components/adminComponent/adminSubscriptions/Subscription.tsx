@@ -3,10 +3,15 @@ import {
   useGetActiveSubscriptionPanQuery,
   usePaymentCreateMutation,
 } from "@/redux/api/subscriptoinPan/subscriptionPlanSliceApi";
-import { setPlan } from "@/redux/features/payment/paymentSlice";
+import {
+  setClientSecret,
+  setPlan,
+} from "@/redux/features/payment/paymentSlice";
 import LoadingPage from "@/share/loading/LoadingPage";
+import PrimaryButton from "@/share/primaryButton/PrimaryButton";
 import { useRouter } from "next/navigation";
 import React from "react";
+import { LuLoader } from "react-icons/lu";
 import { useDispatch } from "react-redux";
 
 export interface Plan {
@@ -24,6 +29,8 @@ export interface Plan {
 }
 
 const AdminSubscriptionPlan: React.FC = () => {
+  const [loadingPlanId, setLoadingPlanId] = React.useState<string | null>(null);
+
   const { data, isLoading } = useGetActiveSubscriptionPanQuery("");
   const [paymentPost, { isLoading: payLoading }] = usePaymentCreateMutation();
   const router = useRouter();
@@ -33,22 +40,34 @@ const AdminSubscriptionPlan: React.FC = () => {
 
   const handleSubscriptSelect = async (subscriptionId: string) => {
     try {
+      setLoadingPlanId(subscriptionId);
+
       const response = await paymentPost({
         planId: subscriptionId,
         planType: "monthly",
       }).unwrap();
 
+      dispatch(setClientSecret(response?.data.clientSecret));
       console.log(response);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoadingPlanId(null);
     }
-    dispatch(
-      setPlan({
-        planId: subscriptionId,
-        planType: "monthly",
-      }),
-    );
   };
+
+  // const handleSubscriptSelect = async (subscriptionId: string) => {
+  //   try {
+  //     const response = await paymentPost({
+  //       planId: subscriptionId,
+  //       planType: "monthly",
+  //     }).unwrap();
+  //     dispatch(setClientSecret(response?.data.clientSecret));
+  //     console.log(response);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   if (isLoading) {
     return <LoadingPage />;
@@ -145,10 +164,15 @@ const AdminSubscriptionPlan: React.FC = () => {
                 </div>
 
                 {/* Bottom Button */}
+
                 <button
+                  disabled={loadingPlanId === plan.id}
                   onClick={() => handleSubscriptSelect(plan.id)}
                   className="mt-auto flex w-full items-center justify-center gap-3 rounded-full border bg-primary py-2 text-sm font-medium text-white transition hover:bg-primary hover:text-white"
                 >
+                  {loadingPlanId === plan.id && (
+                    <LuLoader className="animate-spin" />
+                  )}
                   Upgrade Plan
                   <svg
                     className="h-4 w-4"
