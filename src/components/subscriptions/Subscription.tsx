@@ -1,14 +1,15 @@
-import React from "react";
+"use client";
 import { TrendingUp, TrendingDown, Users } from "lucide-react";
 import Link from "next/link";
+import { useGetAllSubscriptionPanQuery } from "@/redux/api/subscriptoinPan/subscriptionPlanSliceApi";
 
-interface Plan {
-  name: string;
-  highlighted: boolean;
-  description: string;
-  price: number;
-  features: string[];
-}
+// interface Plan {
+//   name: string;
+//   highlighted: boolean;
+//   description: string;
+//   price: number;
+//   features: string[];
+// }
 
 interface Distribution {
   plan: string;
@@ -17,53 +18,71 @@ interface Distribution {
   color: string;
 }
 
+interface Plan {
+  id: string;
+  name: string;
+  isActive: boolean;
+  description: string;
+  monthlyPrice: number;
+  annualPrice: number;
+  maxReports: number;
+  maxAccounts: number;
+  features: string[];
+  createdAt: string;
+  updatedAt: string;
+}
+
 const SubscriptionPlan: React.FC = () => {
-  const plans: Plan[] = [
-    {
-      name: "Basic",
-      highlighted: false,
-      description:
-        "The Slate necessities. Every thing you need to get up and running.",
-      price: 16.0,
-      features: [
-        "3 meeting preparations per month",
-        "Basic company insights",
-        "Meeting summary export",
-        "Email support",
-      ],
-    },
-    {
-      name: "Basic",
-      highlighted: true,
-      description:
-        "The Slate necessities. Every thing you need to get up and running.",
-      price: 16.0,
-      features: [
-        "Unlimited meeting preparations",
-        "Advanced AI insights & scripts",
-        "Competitor analysis",
-        "Risk alerts & red flags",
-        "Meeting templates",
-        "Priority support",
-        "Team collaboration (coming soon)",
-      ],
-    },
-    {
-      name: "Basic",
-      highlighted: false,
-      description:
-        "The Slate necessities. Every thing you need to get up and running.",
-      price: 16.0,
-      features: [
-        "Unlimited meeting preparations",
-        "Team collaboration (coming soon)",
-        "Competitor analysis",
-        "Risk alerts & red flags",
-        "Priority support",
-        "Advanced AI insights & scripts",
-      ],
-    },
-  ];
+  const { data, isLoading } = useGetAllSubscriptionPanQuery("");
+  const plans: Plan[] = data?.data ?? [];
+  console.log(data);
+
+  // const plans: Plan[] = [
+  //   {
+  //     name: "Basic",
+  //     highlighted: false,
+  //     description:
+  //       "The Slate necessities. Every thing you need to get up and running.",
+  //     price: 16.0,
+  //     features: [
+  //       "3 meeting preparations per month",
+  //       "Basic company insights",
+  //       "Meeting summary export",
+  //       "Email support",
+  //     ],
+  //   },
+  //   {
+  //     name: "Basic",
+  //     highlighted: true,
+  //     description:
+  //       "The Slate necessities. Every thing you need to get up and running.",
+  //     price: 16.0,
+  //     features: [
+  //       "Unlimited meeting preparations",
+  //       "Advanced AI insights & scripts",
+  //       "Competitor analysis",
+  //       "Risk alerts & red flags",
+  //       "Meeting templates",
+  //       "Priority support",
+  //       "Team collaboration (coming soon)",
+  //     ],
+  //   },
+  //   {
+  //     name: "Basic",
+  //     highlighted: false,
+  //     description:
+  //       "The Slate necessities. Every thing you need to get up and running.",
+  //     price: 16.0,
+  //     features: [
+  //       "Unlimited meeting preparations",
+  //       "Team collaboration (coming soon)",
+  //       "Competitor analysis",
+  //       "Risk alerts & red flags",
+  //       "Priority support",
+  //       "Advanced AI insights & scripts",
+  //     ],
+  //   },
+  // ];
 
   const distribution: Distribution[] = [
     { plan: "Free", users: 4224, percentage: 34, color: "bg-gray-400" },
@@ -103,7 +122,7 @@ const SubscriptionPlan: React.FC = () => {
                 <div className="mb-4 rounded-xl bg-gray-2 p-4">
                   <div
                     className={`mb-4 inline-block rounded-full px-4 py-1 text-sm font-medium ${
-                      plan.highlighted
+                      plan.name === "ADVANCED"
                         ? "bg-primary text-white"
                         : "bg-white text-primary"
                     }`}
@@ -119,7 +138,7 @@ const SubscriptionPlan: React.FC = () => {
                   {/* Price */}
                   <div className="mb-6">
                     <span className="text-2xl font-bold text-gray-900 xl:text-3xl">
-                      ${plan.price.toFixed(2)}
+                      ${plan.monthlyPrice}
                     </span>
                     <span className="ml-2 text-gray-500">/Month</span>
                   </div>

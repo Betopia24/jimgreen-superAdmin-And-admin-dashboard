@@ -18,8 +18,39 @@ export const subscriptionPanApi = baseApi.injectEndpoints({
       }),
       providesTags: ["SubscriptionPan"],
     }),
+
+    // for super addmin working
+    createSubscriptionPan: builder.mutation({
+      query: (body) => ({
+        url: "/plans",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["SubscriptionPan"],
+    }),
+
+    getSingleSubscriptionPan: builder.query({
+      query: (id) => ({
+        url: `/plans/${id}`,
+        method: "GET",
+      }),
+      providesTags: ["SubscriptionPan"],
+    }),
+
+    getAllSubscriptionPan: builder.query({
+      query: (id) => ({
+        url: `/plans`,
+        method: "GET",
+      }),
+      providesTags: ["SubscriptionPan"],
+    }),
   }),
 });
 
-export const { useGetActiveSubscriptionPanQuery, usePaymentCreateMutation } =
-  subscriptionPanApi;
+export const {
+  useGetActiveSubscriptionPanQuery,
+  usePaymentCreateMutation,
+  useCreateSubscriptionPanMutation,
+  useGetAllSubscriptionPanQuery,
+  useGetSingleSubscriptionPanQuery,
+} = subscriptionPanApi;

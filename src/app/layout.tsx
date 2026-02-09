@@ -1,10 +1,8 @@
 import "@/css/satoshi.css";
 import "@/css/style.css";
-
 import { Sidebar } from "@/components/Layouts/sidebar";
 import "flatpickr/dist/flatpickr.min.css";
 import "jsvectormap/dist/jsvectormap.css";
-
 import { Header } from "@/components/Layouts/header";
 import type { Metadata } from "next";
 import NextTopLoader from "nextjs-toploader";
@@ -40,7 +38,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
         <ReduxProvider>
           <Toaster position="top-center" richColors />
           <Providers>
-            <NextTopLoader color="#5750F1" showSpinner={false} />
+            <NextTopLoader color="#004AAD" showSpinner={false} />
             <div className="flex min-h-screen">
               <Sidebar />
               <div className="w-full bg-gray-2 dark:bg-[#020d1a]">
