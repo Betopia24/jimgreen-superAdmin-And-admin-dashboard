@@ -1,81 +1,177 @@
 "use client";
-import React, { useState } from "react";
-import { Info, DollarSign, Zap } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { Info, DollarSign, Zap, Plus, X } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import {
+  useCreateSubscriptionPanMutation,
+  useDeleteSubscriptionPanMutation,
+  useGetSingleSubscriptionPanQuery,
+  useUpdateSubscriptionPanMutation,
+} from "@/redux/api/subscriptoinPan/subscriptionPlanSliceApi";
+import { toast } from "sonner";
+import { Error } from "@/components/adminComponent/TeamManagement/addMember/AddMemberForm";
+import PrimaryButton from "@/share/primaryButton/PrimaryButton";
+import LoadingPage from "@/share/loading/LoadingPage";
+import DeleteConfirmModal from "@/share/DeteleConfirm/DeleteConfirm";
 
-interface Features {
-  aiPersona: boolean;
-  questionRecommender: boolean;
-  dealIntelligence: boolean;
-  multiLanguage: boolean;
-  dashboardAnalytics: boolean;
-  prioritySupport: boolean;
-}
-
-interface PlanData {
-  planName: string;
-  status: boolean;
+interface PlanFormData {
+  name: string;
+  isActive: boolean;
   description: string;
-  monthlyPrice: string;
-  annualPrice: string;
-  currency: string;
-  maxMeetings: string;
-  maxAiSimulations: string;
-  storageLimit: string;
-  features: Features;
+  monthlyPrice: number;
+  annualPrice: number;
+  maxReports: number;
+  maxAccounts: number;
+  features: string[];
 }
 
-interface FeatureItem {
-  key: keyof Features;
-  label: string;
-}
-
-export default function EidtPlan() {
-  const [planData, setPlanData] = useState<PlanData>({
-    planName: "Pro",
-    status: true,
-    description: "Brief description of the plan",
-    monthlyPrice: "29",
-    annualPrice: "29",
-    currency: "USD ($)",
-    maxMeetings: "100",
-    maxAiSimulations: "50",
-    storageLimit: "100",
-    features: {
-      aiPersona: true,
-      questionRecommender: true,
-      dealIntelligence: false,
-      multiLanguage: true,
-      dashboardAnalytics: true,
-      prioritySupport: false,
+export default function NewPlan() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<string | null>(null);
+  const {
+    register,
+    handleSubmit,
+    control,
+    watch,
+    reset,
+    setValue,
+    formState: { errors },
+  } = useForm<PlanFormData>({
+    defaultValues: {
+      name: "",
+      isActive: true,
+      description: "Brief description of the plan",
+      monthlyPrice: 29,
+      annualPrice: 9,
+      maxAccounts: 100,
+      maxReports: 50,
+      features: [
+        "AI Persona Customization",
+        "Question Recommender",
+        "Deal Intelligence",
+        "Multi-language Support",
+        "Dashboard Analytics",
+        "Priority Support",
+      ],
     },
   });
 
-  const handleInputChange = (
-    field: keyof Omit<PlanData, "features">,
-    value: string | boolean,
-  ): void => {
-    setPlanData((prev) => ({ ...prev, [field]: value }));
+  const [newFeatureName, setNewFeatureName] = useState("");
+  const features = watch("features");
+
+  const { data, isLoading: planLoading } = useGetSingleSubscriptionPanQuery(id);
+
+  console.log(data);
+
+  const [updatePlanPost, { isLoading }] = useUpdateSubscriptionPanMutation();
+  const [deletePan, { isLoading: DeleteLoading }] =
+    useDeleteSubscriptionPanMutation();
+
+  const handleAddFeature = () => {
+    if (newFeatureName.trim() === "") return;
+
+    setValue("features", [...features, newFeatureName.trim()]);
+    setNewFeatureName("");
   };
 
-  const handleFeatureToggle = (feature: keyof Features): void => {
-    setPlanData((prev) => ({
-      ...prev,
-      features: { ...prev.features, [feature]: !prev.features[feature] },
-    }));
+  const handleRemoveFeature = (index: number) => {
+    setValue(
+      "features",
+      features.filter((_, idx) => idx !== index),
+    );
   };
 
-  const featureList: FeatureItem[] = [
-    { key: "aiPersona", label: "AI Persona Customization" },
-    { key: "questionRecommender", label: "Question Recommender" },
-    { key: "dealIntelligence", label: "Deal Intelligence" },
-    { key: "multiLanguage", label: "Multi-language Support" },
-    { key: "dashboardAnalytics", label: "Dashboard Analytics" },
-    { key: "prioritySupport", label: "Priority Support" },
-  ];
+  const handleEditFeature = (index: number, newValue: string) => {
+    setValue(
+      "features",
+      features.map((feature, idx) => (idx === index ? newValue : feature)),
+    );
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleAddFeature();
+    }
+  };
+
+  // const onSubmit = async (data: PlanFormData) => {
+  //   console.log("Form Data:", data);
+  //   // Handle form submission
+  //   try {
+  //     const response = await updatePlanPost(data).unwrap();
+  //     if (response?.success) {
+  //       toast.success(response?.message);
+  //     }
+  //   } catch (error) {
+  //     const err = error as Error;
+  //     toast.error(err.data.message);
+  //   }
+  // };
+
+  const onSubmit = async (formData: PlanFormData) => {
+    console.log(formData);
+    try {
+      const response = await updatePlanPost({
+        id,
+        data: formData,
+      }).unwrap();
+
+      if (response?.success) {
+        toast.success(response.message);
+        router.push("/super-admin/subscriptions");
+      }
+    } catch (error) {
+      const err = error as Error;
+      toast.error(err.data.message);
+    }
+  };
+
+  useEffect(() => {
+    if (data?.data) {
+      reset({
+        name: data.data.name,
+        isActive: data.data.isActive,
+        description: data.data.description,
+        monthlyPrice: data.data.monthlyPrice,
+        annualPrice: data.data.annualPrice,
+        maxAccounts: data.data.maxAccounts,
+        maxReports: data.data.maxReports,
+        features: data.data.features,
+      });
+    }
+  }, [data, reset]);
+
+  const handleReset = () => {
+    reset();
+    setNewFeatureName("");
+  };
+
+  // delete fucntion
+  const handleDelete = async () => {
+    try {
+      const response = await deletePan(id).unwrap();
+      if (response?.success) {
+        toast.success(response.message);
+        router.push("/super-admin/subscriptions");
+      }
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  if (planLoading) {
+    return <LoadingPage />;
+  }
 
   return (
-    <div className="">
-      <div className="">
+    <div className="min-h-screen">
+      <form onSubmit={handleSubmit(onSubmit)}>
         {/* Header */}
         <div className="mb-6">
           <h1 className="text-2xl font-semibold text-gray-900">
@@ -95,38 +191,55 @@ export default function EidtPlan() {
             </h2>
           </div>
 
-          <div className="gird-cols-1 grid gap-4 md:grid-cols-2">
+          <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
             <div>
               <label className="mb-2 block text-sm font-medium text-gray-700">
                 Plan Name
               </label>
-              <input
-                type="text"
-                value={planData.planName}
-                onChange={(e) => handleInputChange("planName", e.target.value)}
-                className="w-full rounded-md border border-gray-200 bg-gray-50 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
+              <select
+                {...register("name", { required: "Plan name is required" })}
+                className="w-full rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Select Plan</option>
+                <option value="BASIC">Basic</option>
+                <option value="ADVANCED">Advanced</option>
+                <option value="EXPERT">Expert</option>
+              </select>
+              {errors.name && (
+                <p className="mt-1 text-xs text-red-500">
+                  {errors.name.message}
+                </p>
+              )}
             </div>
             <div>
               <label className="mb-2 block text-sm font-medium text-gray-700">
                 Status
               </label>
-              <div className="flex items-center justify-between rounded-md border border-gray-200 bg-gray-50 px-3 py-2">
-                <span className="text-sm text-gray-700">Active</span>
-                <button
-                  onClick={() => handleInputChange("status", !planData.status)}
-                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                    planData.status ? "bg-primary" : "bg-gray-300"
-                  }`}
-                  aria-label="Toggle status"
-                >
-                  <span
-                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                      planData.status ? "translate-x-6" : "translate-x-1"
-                    }`}
-                  />
-                </button>
-              </div>
+              <Controller
+                name="isActive"
+                control={control}
+                render={({ field }) => (
+                  <div className="flex items-center justify-between rounded-md border border-gray-200 bg-gray-50 px-3 py-2">
+                    <span className="text-sm text-gray-700">
+                      {field.value ? "Active" : "Inactive"}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => field.onChange(!field.value)}
+                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                        field.value ? "bg-primary" : "bg-gray-300"
+                      }`}
+                      aria-label="Toggle status"
+                    >
+                      <span
+                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                          field.value ? "translate-x-6" : "translate-x-1"
+                        }`}
+                      />
+                    </button>
+                  </div>
+                )}
+              />
             </div>
           </div>
 
@@ -135,8 +248,7 @@ export default function EidtPlan() {
               Description
             </label>
             <textarea
-              value={planData.description}
-              onChange={(e) => handleInputChange("description", e.target.value)}
+              {...register("description")}
               rows={3}
               className="w-full rounded-md border border-gray-200 bg-gray-50 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
@@ -150,7 +262,7 @@ export default function EidtPlan() {
             <h2 className="text-lg font-semibold text-gray-900">Pricing</h2>
           </div>
 
-          <div className="gird-cols-1 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2">
             <div>
               <label className="mb-2 block text-sm font-medium text-gray-700">
                 Monthly Price
@@ -158,14 +270,19 @@ export default function EidtPlan() {
               <div className="relative">
                 <span className="absolute left-3 top-2 text-gray-500">$</span>
                 <input
-                  type="text"
-                  value={planData.monthlyPrice}
-                  onChange={(e) =>
-                    handleInputChange("monthlyPrice", e.target.value)
-                  }
+                  type="number"
+                  {...register("monthlyPrice", {
+                    valueAsNumber: true,
+                    required: "Monthly price is required",
+                  })}
                   className="w-full rounded-md border border-gray-200 bg-gray-50 py-2 pl-7 pr-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
+              {errors.monthlyPrice && (
+                <p className="mt-1 text-xs text-red-500">
+                  {errors.monthlyPrice.message}
+                </p>
+              )}
             </div>
             <div>
               <label className="mb-2 block text-sm font-medium text-gray-700">
@@ -174,28 +291,19 @@ export default function EidtPlan() {
               <div className="relative">
                 <span className="absolute left-3 top-2 text-gray-500">$</span>
                 <input
-                  type="text"
-                  value={planData.annualPrice}
-                  onChange={(e) =>
-                    handleInputChange("annualPrice", e.target.value)
-                  }
+                  type="number"
+                  {...register("annualPrice", {
+                    valueAsNumber: true,
+                    required: "Annual price is required",
+                  })}
                   className="w-full rounded-md border border-gray-200 bg-gray-50 py-2 pl-7 pr-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
-            </div>
-            <div>
-              <label className="mb-2 block text-sm font-medium text-gray-700">
-                Currency
-              </label>
-              <select
-                value={planData.currency}
-                onChange={(e) => handleInputChange("currency", e.target.value)}
-                className="w-full rounded-md border border-gray-200 bg-gray-50 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option>USD ($)</option>
-                <option>EUR (€)</option>
-                <option>GBP (£)</option>
-              </select>
+              {errors.annualPrice && (
+                <p className="mt-1 text-xs text-red-500">
+                  {errors.annualPrice.message}
+                </p>
+              )}
             </div>
           </div>
         </div>
@@ -209,17 +317,14 @@ export default function EidtPlan() {
             </h2>
           </div>
 
-          <div className="gird-cols-1 mb-6 grid gap-4 md:grid-cols-2">
+          <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2">
             <div>
               <label className="mb-2 block text-sm font-medium text-gray-700">
                 Max Meetings per Month
               </label>
               <input
-                type="text"
-                value={planData.maxMeetings}
-                onChange={(e) =>
-                  handleInputChange("maxMeetings", e.target.value)
-                }
+                type="number"
+                {...register("maxAccounts", { valueAsNumber: true })}
                 className="w-full rounded-md border border-gray-200 bg-gray-50 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
@@ -228,92 +333,119 @@ export default function EidtPlan() {
                 Max AI Simulations
               </label>
               <input
-                type="text"
-                value={planData.maxAiSimulations}
-                onChange={(e) =>
-                  handleInputChange("maxAiSimulations", e.target.value)
-                }
+                type="number"
+                {...register("maxReports", { valueAsNumber: true })}
                 className="w-full rounded-md border border-gray-200 bg-gray-50 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
           </div>
 
-          <div className="mb-6">
-            <label className="mb-2 block text-sm font-medium text-gray-700">
-              Storage Limit (GB)
-            </label>
-            <input
-              type="text"
-              value={planData.storageLimit}
-              onChange={(e) =>
-                handleInputChange("storageLimit", e.target.value)
-              }
-              className="w-full rounded-md border border-gray-200 bg-gray-50 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
+          {/* Feature List Section */}
+          <div className="space-y-4">
+            <h3 className="text-sm font-medium text-gray-700">Features</h3>
 
-          {/* Feature Toggles */}
-          <div className="space-y-3">
-            {featureList.map((feature, idx) => (
-              <div
-                key={feature.key}
-                className={`flex items-center justify-between rounded-md p-3 ${idx % 2 === 0 ? "bg-gray-50" : ""}`}
+            {/* Add New Feature Input */}
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={newFeatureName}
+                onChange={(e) => setNewFeatureName(e.target.value)}
+                onKeyPress={handleKeyPress}
+                placeholder="Enter new feature name"
+                className="flex-1 rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <button
+                type="button"
+                onClick={handleAddFeature}
+                className="flex items-center gap-2 rounded-md bg-blue-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-600"
               >
-                <span className="text-sm text-gray-700">{feature.label}</span>
-                <button
-                  onClick={() => handleFeatureToggle(feature.key)}
-                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                    planData.features[feature.key]
-                      ? "bg-primary"
-                      : "bg-gray-300"
-                  }`}
-                  aria-label={`Toggle ${feature.label}`}
+                <Plus className="h-4 w-4" />
+                Add
+              </button>
+            </div>
+
+            {/* Feature List */}
+            <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+              {features.map((feature, idx) => (
+                <div
+                  key={idx}
+                  className={`flex items-center justify-between rounded-md p-3 ${idx % 2 === 0 ? "bg-gray-50" : ""}`}
                 >
-                  <span
-                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                      planData.features[feature.key]
-                        ? "translate-x-6"
-                        : "translate-x-1"
-                    }`}
-                  />
-                </button>
-              </div>
-            ))}
+                  <div className="flex flex-1 items-center gap-3">
+                    <span className="text-sm font-medium text-gray-500">
+                      {idx + 1}.
+                    </span>
+                    <input
+                      type="text"
+                      value={feature}
+                      onChange={(e) => handleEditFeature(idx, e.target.value)}
+                      className="flex-1 rounded-md border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveFeature(idx)}
+                    className="ml-2 text-gray-400 transition-colors hover:text-red-500"
+                    aria-label={`Remove ${feature}`}
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
         {/* Action Buttons */}
-        <div className="flex flex-col-reverse items-center justify-between sm:flex-row">
-          <button className="mt-2 flex w-full items-center justify-center gap-2 rounded-md bg-red-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-600 sm:mb-0 sm:w-auto">
-            <svg
-              className="h-4 w-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+        <div className="flex items-center justify-center lg:justify-between">
+          <div>
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedItem(id);
+                setIsDeleteOpen(true);
+              }}
+              className="rounded-md border border-red-500 bg-red-dark px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-              />
-            </svg>
-            Delete Plan
-          </button>
-
-          <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
-            <button className="rounded-md bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200">
-              Reset to Default
-            </button>
-            <button className="rounded-md bg-gray-50 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-300">
-              Cancel
-            </button>
-            <button className="rounded-md bg-primary px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-700">
-              Save Changes
+              Delete
             </button>
           </div>
+          <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+            <button
+              type="button"
+              onClick={handleReset}
+              className="rounded-md bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-300"
+            >
+              Reset to Default
+            </button>
+            <button
+              type="button"
+              onClick={() => router.back()}
+              className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
+            >
+              Cancel
+            </button>
+            <div>
+              <PrimaryButton
+                text=" Save Changes"
+                type="submit"
+                loading={isLoading}
+                className="px-6 py-2"
+              />
+            </div>
+          </div>
         </div>
-      </div>
+      </form>
+      <DeleteConfirmModal
+        isOpen={isDeleteOpen}
+        onClose={() => setIsDeleteOpen(false)}
+        onConfirm={handleDelete}
+        title="Subscription Plan"
+        message="Are you sure you want to delete this project? This action cannot be undone."
+        confirmText="Yes, Delete"
+        cancelText="No, Cancel"
+        isLoading={DeleteLoading}
+      />
     </div>
   );
 }

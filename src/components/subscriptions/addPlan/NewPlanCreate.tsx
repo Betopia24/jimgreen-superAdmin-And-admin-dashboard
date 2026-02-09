@@ -491,6 +491,7 @@ export default function NewPlan() {
       const response = await createPlanPost(data).unwrap();
       if (response?.success) {
         toast.success(response?.message);
+        router.push("/super-admin/subscriptions");
       }
     } catch (error) {
       const err = error as Error;
