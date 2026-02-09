@@ -47,6 +47,7 @@ export function Sidebar() {
     pathname === "/admin" ||
     pathname === "/admin/team-management" ||
     pathname === "/admin/subscriptions" ||
+    pathname === "/admin/subscriptions/payment" ||
     pathname === "/admin/reports-Analytics" ||
     pathname === "/admin/reports-Analytics/report-details" ||
     pathname === "/admin/settings"
@@ -56,7 +57,7 @@ export function Sidebar() {
     NAV_DATA = NAV_DATA_SUPER_ADMIN;
   }
 
-  /** ⭐ Auto-expand if child matches */
+  /**  Auto-expand if child matches */
   useEffect(() => {
     NAV_DATA.forEach((section) =>
       section.items.forEach((item: NavItem) => {

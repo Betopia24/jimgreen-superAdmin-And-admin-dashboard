@@ -1,23 +1,20 @@
-import React from "react";
+"use client";
 import StripeProvider from "./StripeProvider";
 import CheckoutForm from "./CheckoutForm";
 import { usePaymentCreateMutation } from "@/redux/api/subscriptoinPan/subscriptionPlanSliceApi";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 const RootPaymentFIle = () => {
-  //   const res = await fetch("/api/subscription", {
-  //     method: "POST",
-  //     body: JSON.stringify({
-  //       planId: "69807d522884161248cd4783",
-  //       planType: "monthly",
-  //     }),
-  //   });
-
-  //   const data = await res.json();
+  const clientSecret = useSelector(
+    (state: RootState) => state.payment.clientSecret,
+  );
+  console.log("clientSecret", clientSecret);
 
   const [paymentPost, { isLoading }] = usePaymentCreateMutation();
   return (
     <div>
-      <StripeProvider clientSecret={"data.data.clientSecret"}>
+      <StripeProvider clientSecret={`${clientSecret}`}>
         <CheckoutForm />
       </StripeProvider>
       ;

@@ -41,33 +41,19 @@ const AdminSubscriptionPlan: React.FC = () => {
   const handleSubscriptSelect = async (subscriptionId: string) => {
     try {
       setLoadingPlanId(subscriptionId);
-
       const response = await paymentPost({
         planId: subscriptionId,
         planType: "monthly",
       }).unwrap();
 
       dispatch(setClientSecret(response?.data.clientSecret));
-      console.log(response);
+      router.push("/admin/subscriptions/payment");
     } catch (error) {
       console.log(error);
     } finally {
       setLoadingPlanId(null);
     }
   };
-
-  // const handleSubscriptSelect = async (subscriptionId: string) => {
-  //   try {
-  //     const response = await paymentPost({
-  //       planId: subscriptionId,
-  //       planType: "monthly",
-  //     }).unwrap();
-  //     dispatch(setClientSecret(response?.data.clientSecret));
-  //     console.log(response);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
 
   if (isLoading) {
     return <LoadingPage />;
