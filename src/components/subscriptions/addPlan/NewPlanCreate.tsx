@@ -13,10 +13,10 @@ interface PlanFormData {
   planName: string;
   status: boolean;
   description: string;
-  monthlyPrice: string;
-  annualPrice: string;
-  maxMeetings: string;
-  maxAiSimulations: string;
+  monthlyPrice: number;
+  annualPrice: number;
+  maxReports: number;
+  maxAccounts: number;
   features: Feature[];
 }
 
@@ -35,10 +35,10 @@ export default function NewPlan() {
       planName: "Pro",
       status: true,
       description: "Brief description of the plan",
-      monthlyPrice: "29",
-      annualPrice: "29",
-      maxMeetings: "100",
-      maxAiSimulations: "50",
+      monthlyPrice: 29,
+      annualPrice: 9,
+      maxAccounts: 100,
+      maxReports: 50,
       features: [
         { key: "aiPersona", label: "AI Persona Customization" },
         { key: "questionRecommender", label: "Question Recommender" },
@@ -206,6 +206,7 @@ export default function NewPlan() {
                 <input
                   type="text"
                   {...register("monthlyPrice", {
+                    valueAsNumber: true,
                     required: "Monthly price is required",
                   })}
                   className="w-full rounded-md border border-gray-200 bg-gray-50 py-2 pl-7 pr-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -226,6 +227,7 @@ export default function NewPlan() {
                 <input
                   type="text"
                   {...register("annualPrice", {
+                    valueAsNumber: true,
                     required: "Annual price is required",
                   })}
                   className="w-full rounded-md border border-gray-200 bg-gray-50 py-2 pl-7 pr-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -269,7 +271,7 @@ export default function NewPlan() {
               </label>
               <input
                 type="text"
-                {...register("maxMeetings")}
+                {...register("maxAccounts", { valueAsNumber: true })}
                 className="w-full rounded-md border border-gray-200 bg-gray-50 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
@@ -279,7 +281,7 @@ export default function NewPlan() {
               </label>
               <input
                 type="text"
-                {...register("maxAiSimulations")}
+                {...register("maxReports", { valueAsNumber: true })}
                 className="w-full rounded-md border border-gray-200 bg-gray-50 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
@@ -316,7 +318,7 @@ export default function NewPlan() {
                 className="flex items-center gap-2 rounded-md bg-blue-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-600"
               >
                 <Plus className="h-4 w-4" />
-                Add New Feature
+                Add
               </button>
             </div>
 
