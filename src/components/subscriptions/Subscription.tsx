@@ -1,6 +1,7 @@
-import React from "react";
+"use client";
 import { TrendingUp, TrendingDown, Users } from "lucide-react";
 import Link from "next/link";
+import { useGetAllSubscriptionPanQuery } from "@/redux/api/subscriptoinPan/subscriptionPlanSliceApi";
 
 interface Plan {
   name: string;
@@ -18,6 +19,10 @@ interface Distribution {
 }
 
 const SubscriptionPlan: React.FC = () => {
+  const { data, isLoading } = useGetAllSubscriptionPanQuery("");
+
+  console.log(data);
+
   const plans: Plan[] = [
     {
       name: "Basic",
