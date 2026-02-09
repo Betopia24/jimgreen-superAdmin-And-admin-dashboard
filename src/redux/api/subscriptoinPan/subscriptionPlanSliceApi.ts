@@ -29,6 +29,23 @@ export const subscriptionPanApi = baseApi.injectEndpoints({
       invalidatesTags: ["SubscriptionPan"],
     }),
 
+    updateSubscriptionPan: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/plans/${id}`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["SubscriptionPan"],
+    }),
+
+    deleteSubscriptionPan: builder.mutation({
+      query: (id) => ({
+        url: `/plans/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["SubscriptionPan"],
+    }),
+
     getSingleSubscriptionPan: builder.query({
       query: (id) => ({
         url: `/plans/${id}`,
@@ -53,4 +70,6 @@ export const {
   useCreateSubscriptionPanMutation,
   useGetAllSubscriptionPanQuery,
   useGetSingleSubscriptionPanQuery,
+  useUpdateSubscriptionPanMutation,
+  useDeleteSubscriptionPanMutation,
 } = subscriptionPanApi;

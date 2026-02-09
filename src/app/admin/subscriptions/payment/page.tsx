@@ -1,5 +1,11 @@
+import RootPaymentFIle from "@/components/adminComponent/payment/RootPaymentFIle";
+
 const page = () => {
-  return <>this payment</>;
+  return (
+    <>
+      <RootPaymentFIle />
+    </>
+  );
 };
 
 export default page;

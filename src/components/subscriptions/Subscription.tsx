@@ -2,6 +2,7 @@
 import { TrendingUp, TrendingDown, Users } from "lucide-react";
 import Link from "next/link";
 import { useGetAllSubscriptionPanQuery } from "@/redux/api/subscriptoinPan/subscriptionPlanSliceApi";
+import LoadingPage from "@/share/loading/LoadingPage";
 
 // interface Plan {
 //   name: string;
@@ -37,58 +38,15 @@ const SubscriptionPlan: React.FC = () => {
   const plans: Plan[] = data?.data ?? [];
   console.log(data);
 
-  // const plans: Plan[] = [
-  //   {
-  //     name: "Basic",
-  //     highlighted: false,
-  //     description:
-  //       "The Slate necessities. Every thing you need to get up and running.",
-  //     price: 16.0,
-  //     features: [
-  //       "3 meeting preparations per month",
-  //       "Basic company insights",
-  //       "Meeting summary export",
-  //       "Email support",
-  //     ],
-  //   },
-  //   {
-  //     name: "Basic",
-  //     highlighted: true,
-  //     description:
-  //       "The Slate necessities. Every thing you need to get up and running.",
-  //     price: 16.0,
-  //     features: [
-  //       "Unlimited meeting preparations",
-  //       "Advanced AI insights & scripts",
-  //       "Competitor analysis",
-  //       "Risk alerts & red flags",
-  //       "Meeting templates",
-  //       "Priority support",
-  //       "Team collaboration (coming soon)",
-  //     ],
-  //   },
-  //   {
-  //     name: "Basic",
-  //     highlighted: false,
-  //     description:
-  //       "The Slate necessities. Every thing you need to get up and running.",
-  //     price: 16.0,
-  //     features: [
-  //       "Unlimited meeting preparations",
-  //       "Team collaboration (coming soon)",
-  //       "Competitor analysis",
-  //       "Risk alerts & red flags",
-  //       "Priority support",
-  //       "Advanced AI insights & scripts",
-  //     ],
-  //   },
-  // ];
-
   const distribution: Distribution[] = [
     { plan: "Free", users: 4224, percentage: 34, color: "bg-gray-400" },
     { plan: "Pro", users: 5834, percentage: 47, color: "bg-primary" },
     { plan: "Enterprise", users: 2400, percentage: 19, color: "bg-green-600" },
   ];
+
+  if (isLoading) {
+    return <LoadingPage />;
+  }
 
   return (
     <div className="min-h-screen">
@@ -177,7 +135,7 @@ const SubscriptionPlan: React.FC = () => {
 
                 {/* Bottom Button */}
                 <Link
-                  href={`/super-admin/subscriptions/edit-plan`}
+                  href={`/super-admin/subscriptions/edit-plan?id=${plan.id}`}
                   className="bg-[rgba(255, 255, 255, 0.20)] mt-auto flex w-full items-center justify-center gap-3 rounded-full border py-2 text-sm font-medium text-gray-700 transition hover:bg-primary hover:text-white"
                 >
                   Edit Plan
