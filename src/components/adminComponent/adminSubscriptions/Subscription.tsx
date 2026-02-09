@@ -9,25 +9,16 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { useDispatch } from "react-redux";
 
-export interface PlanFeatures {
-  aiAnalysis: boolean;
-  prioritySupport: boolean;
-  apiAccess: boolean;
-  customBranding: boolean;
-  dashboardAnalytics: boolean;
-  advancedReports: boolean;
-}
-
 export interface Plan {
   id: string;
-  name: "EXPERT" | "ADVANCED" | string; // keep string for future plans
+  name: "EXPERT" | "ADVANCED" | "BASIC"; // keep string for future plans
   isActive: boolean;
   monthlyPrice: number;
   annualPrice: number;
   description: string;
   maxReports: number;
   maxAccounts: number;
-  features: PlanFeatures;
+  features: string[];
   createdAt: string; // ISO date string
   updatedAt: string; // ISO date string
 }
@@ -38,60 +29,7 @@ const AdminSubscriptionPlan: React.FC = () => {
   const router = useRouter();
 
   const dispatch = useDispatch();
-
-  // const plans: Plan[] = [
-  //   {
-  //     name: "Basic",
-  //     highlighted: false,
-  //     description:
-  //       "The Slate necessities. Every thing you need to get up and running.",
-  //     price: "Free",
-  //     features: [
-  //       "3 meeting preparations per month",
-  //       "Basic company insights",
-  //       "Meeting summary export",
-  //       "Email support",
-  //     ],
-  //   },
-  //   {
-  //     name: "Advanced",
-  //     highlighted: true,
-  //     description:
-  //       "The Slate necessities. Every thing you need to get up and running.",
-  //     price: 100.0,
-  //     features: [
-  //       "Unlimited meeting preparations",
-  //       "Advanced AI insights & scripts",
-  //       "Competitor analysis",
-  //       "Risk alerts & red flags",
-  //       "Meeting templates",
-  //       "Priority support",
-  //       "Team collaboration (coming soon)",
-  //     ],
-  //   },
-  //   {
-  //     name: "Expert",
-  //     highlighted: false,
-  //     description:
-  //       "The Slate necessities. Every thing you need to get up and running.",
-  //     price: 230.0,
-  //     features: [
-  //       "Unlimited meeting preparations",
-  //       "Team collaboration (coming soon)",
-  //       "Competitor analysis",
-  //       "Risk alerts & red flags",
-  //       "Priority support",
-  //       "Advanced AI insights & scripts",
-  //     ],
-  //   },
-  // ];
   const plans: Plan[] = data?.data;
-  console.log(plans);
-  const distribution = [
-    { plan: "Free", users: 4224, percentage: 34, color: "bg-gray-400" },
-    { plan: "Pro", users: 5834, percentage: 47, color: "bg-primary" },
-    { plan: "Enterprise", users: 2400, percentage: 19, color: "bg-green-600" },
-  ];
 
   const handleSubscriptSelect = async (subscriptionId: string) => {
     try {
@@ -110,7 +48,6 @@ const AdminSubscriptionPlan: React.FC = () => {
         planType: "monthly",
       }),
     );
-    // router.push("/admin/subscriptions/payment");
   };
 
   if (isLoading) {
@@ -182,7 +119,7 @@ const AdminSubscriptionPlan: React.FC = () => {
                     Featured Include :
                   </p>
 
-                  {/* <ul className="space-y-2.5">
+                  <ul className="space-y-2.5">
                     {plan?.features?.map((feature: string, idx: number) => (
                       <li
                         key={idx}
@@ -204,13 +141,13 @@ const AdminSubscriptionPlan: React.FC = () => {
                         <span>{feature}</span>
                       </li>
                     ))}
-                  </ul> */}
+                  </ul>
                 </div>
 
                 {/* Bottom Button */}
                 <button
                   onClick={() => handleSubscriptSelect(plan.id)}
-                  className="mt-auto flex w-full items-center justify-center gap-3 rounded-full border bg-primary py-2 text-sm font-medium text-gray-700 text-white transition hover:bg-primary hover:text-white"
+                  className="mt-auto flex w-full items-center justify-center gap-3 rounded-full border bg-primary py-2 text-sm font-medium text-white transition hover:bg-primary hover:text-white"
                 >
                   Upgrade Plan
                   <svg
