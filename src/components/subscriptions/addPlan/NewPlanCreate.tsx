@@ -408,6 +408,7 @@ import { useRouter } from "next/navigation";
 import { useCreateSubscriptionPanMutation } from "@/redux/api/subscriptoinPan/subscriptionPlanSliceApi";
 import { toast } from "sonner";
 import { Error } from "@/components/adminComponent/TeamManagement/addMember/AddMemberForm";
+import PrimaryButton from "@/share/primaryButton/PrimaryButton";
 
 interface PlanFormData {
   name: string;
@@ -746,12 +747,14 @@ export default function NewPlan() {
             >
               Cancel
             </button>
-            <button
-              type="submit"
-              className="rounded-md bg-primary px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-primary/90"
-            >
-              Save Changes
-            </button>
+            <div>
+              <PrimaryButton
+                text=" Save Changes"
+                type="submit"
+                loading={isLoading}
+                className="px-6 py-2"
+              />
+            </div>
           </div>
         </div>
       </form>
