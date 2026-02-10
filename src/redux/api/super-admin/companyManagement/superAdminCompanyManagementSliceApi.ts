@@ -10,21 +10,43 @@ export const superAdminCompanyManagementApi = baseApi.injectEndpoints({
     //   }),
     // }),
 
+    companyStatus: builder.mutation({
+      query: (id) => ({
+        url: `/company/${id}/status`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["CompanyManagement"],
+    }),
+
+    deleteCompany: builder.mutation({
+      query: (id) => ({
+        url: `/company/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["CompanyManagement"],
+    }),
+
     getAllCompany: builder.query({
       query: () => ({
-        url: `/users`,
+        url: `/company/list`,
         method: "GET",
       }),
+      providesTags: ["CompanyManagement"],
     }),
 
     getCompanySingle: builder.query({
       query: (id) => ({
-        url: `/users/${id}`,
+        url: `/company/${id}`,
         method: "GET",
       }),
+      providesTags: ["CompanyManagement"],
     }),
   }),
 });
 
-export const { useGetAllCompanyQuery, useGetCompanySingleQuery } =
-  superAdminCompanyManagementApi;
+export const {
+  useGetAllCompanyQuery,
+  useGetCompanySingleQuery,
+  useDeleteCompanyMutation,
+  useCompanyStatusMutation,
+} = superAdminCompanyManagementApi;

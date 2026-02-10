@@ -1,4 +1,4 @@
-import CompanyDetails from "@/components/companyManagement/userDetails/CompanyDetails";
+import CompanyDetails from "@/components/companyManagement/details/CompanyDetails";
 import React from "react";
 
 const page = () => {
