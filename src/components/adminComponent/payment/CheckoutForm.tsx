@@ -58,6 +58,7 @@ import {
 } from "@stripe/react-stripe-js";
 import { useState } from "react";
 import { Loader2, Lock } from "lucide-react";
+import { toast } from "sonner";
 
 export default function CheckoutForm() {
   const stripe = useStripe();
@@ -86,6 +87,7 @@ export default function CheckoutForm() {
       setError(error.message || "Payment failed");
     } else if (paymentIntent?.status === "succeeded") {
       console.log("✅ Payment completed");
+      toast.success("✅ Payment completed");
     }
 
     setLoading(false);

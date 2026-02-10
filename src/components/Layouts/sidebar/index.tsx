@@ -83,8 +83,8 @@ export function Sidebar() {
       Cookies.remove("refreshToken");
       Cookies.remove("token");
       toast.success("Logged out successfully");
-      router.push("http://localhost:3008/signIn"); // optional redirect
-      // router.push("http://206.162.244.131:3008/signIn"); // optional redirect
+      // router.push("http://localhost:3008/signIn");
+      router.push("http://206.162.244.131:3008/signIn");
       setLoading(false); // 2-second delay
     }, 2000);
   };
