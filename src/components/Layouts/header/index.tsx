@@ -37,7 +37,7 @@ export function Header() {
         <h1 className="Welcome mb-0.5 text-2xl font-bold text-primary">
           Welcome
         </h1>
-        <p className="font-medium">Md Shakil</p>
+        {/* <p className="font-medium text-gray-500">Md Shakil</p> */}
       </div>
 
       <div className="flex flex-1 items-center justify-end gap-2 min-[375px]:gap-4">
