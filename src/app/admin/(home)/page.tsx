@@ -1,3 +1,4 @@
+"use client";
 import { createTimeFrameExtractor } from "@/utils/timeframe-extractor";
 import { Suspense } from "react";
 
@@ -7,6 +8,8 @@ import RecentActivity from "./_components/recentActivity/RecentActivity";
 import DashboardOverview from "./_components/overview-cards/OverView";
 import RevenueGrowthChart from "./_components/chats/Chats";
 import Charts from "./_components/chats/Chats";
+import { useGetAdminDashboardHomeOverviewQuery } from "@/redux/api/dashboardHomeAdmin/adminDashboardHomeSlicApi";
+import LoadingPage from "@/share/loading/LoadingPage";
 
 type PropsType = {
   searchParams: Promise<{
@@ -14,7 +17,11 @@ type PropsType = {
   }>;
 };
 
-export default async function Home({ searchParams }: PropsType) {
+export default function Home({ searchParams }: PropsType) {
+  const { data, isLoading } = useGetAdminDashboardHomeOverviewQuery("");
+  if (isLoading) {
+    return <LoadingPage />;
+  }
   return (
     <>
       <Suspense fallback={<OverviewCardsSkeleton />}>

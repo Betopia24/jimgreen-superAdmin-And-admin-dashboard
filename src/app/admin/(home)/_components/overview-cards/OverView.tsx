@@ -85,10 +85,6 @@ export default function DashboardOverview() {
     },
   ];
 
-  if (isLoading) {
-    return <LoadingPage />;
-  }
-
   return (
     <div className="">
       <div className="">
