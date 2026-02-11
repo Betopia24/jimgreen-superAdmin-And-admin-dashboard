@@ -42,7 +42,7 @@ export function UserInfo() {
       Cookies.remove("refreshToken");
       Cookies.remove("token");
       toast.success("Logged out successfully");
-      if (domain === "http://localhost:3008") {
+      if (domain === "http://localhost:3017") {
         router.push("http://localhost:3008/signIn");
       } else {
         router.push(`${process.env.NEXT_PUBLIC_DOMAIN_URL_ONE}/signIn`);
