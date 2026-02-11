@@ -111,9 +111,128 @@
 
 // export default Charts;
 
+// "use client";
+
+// import React, { useState } from "react";
+// import {
+//   BarChart,
+//   Bar,
+//   XAxis,
+//   YAxis,
+//   CartesianGrid,
+//   Tooltip,
+//   Legend,
+//   ResponsiveContainer,
+// } from "recharts";
+// import { useGetAdminDashboardHomeOverviewQuery } from "@/redux/api/dashboardHomeAdmin/adminDashboardHomeSlicApi";
+
+// const Charts: React.FC = () => {
+//   const [timeRange] = useState("Last 6 months");
+
+//   const {
+//     data: responseData,
+//     isLoading,
+//     isError,
+//   } = useGetAdminDashboardHomeOverviewQuery("");
+
+//   // API response data
+//   const chartData = responseData?.data?.reportTrend || [];
+
+//   //  Loading state
+//   if (isLoading) {
+//     return (
+//       <div className="flex h-[400px] items-center justify-center">
+//         <p className="text-gray-500">Loading chart...</p>
+//       </div>
+//     );
+//   }
+
+//   //  Error state
+//   if (isError) {
+//     return (
+//       <div className="flex h-[400px] items-center justify-center">
+//         <p className="text-red-500">Failed to load chart data</p>
+//       </div>
+//     );
+//   }
+
+//   return (
+//     <div className="w-full rounded-lg bg-gray-50 p-4 md:p-8">
+//       {/* Header */}
+//       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+//         <div>
+//           <h1 className="text-2xl font-bold text-gray-900 md:text-3xl">
+//             Platform Usage Trends
+//           </h1>
+//           <p className="mt-1 text-sm text-gray-600 md:text-base">
+//             Reports and customer growth over time
+//           </p>
+//         </div>
+
+//         <span className="self-start rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 sm:self-auto">
+//           {timeRange}
+//         </span>
+//       </div>
+
+//       {/* Chart */}
+//       <div className="h-[400px] w-full md:h-[500px]">
+//         <ResponsiveContainer width="100%" height="100%">
+//           <BarChart
+//             data={chartData}
+//             margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
+//           >
+//             <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+
+//             <XAxis
+//               dataKey="month"
+//               tick={{ fill: "#6b7280", fontSize: 14 }}
+//               axisLine={{ stroke: "#d1d5db" }}
+//             />
+
+//             <YAxis
+//               allowDecimals={false}
+//               tick={{ fill: "#6b7280", fontSize: 14 }}
+//               axisLine={{ stroke: "#d1d5db" }}
+//             />
+
+//             <Tooltip
+//               contentStyle={{
+//                 backgroundColor: "#ffffff",
+//                 border: "1px solid #e5e7eb",
+//                 borderRadius: "8px",
+//                 padding: "10px",
+//               }}
+//             />
+
+//             <Legend iconType="rect" iconSize={14} />
+
+//             <Bar
+//               dataKey="reports"
+//               name="Reports"
+//               fill="#2563eb"
+//               radius={[6, 6, 0, 0]}
+//               maxBarSize={50}
+//             />
+
+//             <Bar
+//               dataKey="customers"
+//               name="Customers"
+//               fill="#16a34a"
+//               radius={[6, 6, 0, 0]}
+//               maxBarSize={50}
+//             />
+//           </BarChart>
+//         </ResponsiveContainer>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Charts;
+
 "use client";
 
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   BarChart,
   Bar,
@@ -126,6 +245,15 @@ import {
 } from "recharts";
 import { useGetAdminDashboardHomeOverviewQuery } from "@/redux/api/dashboardHomeAdmin/adminDashboardHomeSlicApi";
 
+const demoData = [
+  { month: "Jan", reports: 120, customers: 40 },
+  { month: "Feb", reports: 180, customers: 55 },
+  { month: "Mar", reports: 220, customers: 70 },
+  { month: "Apr", reports: 260, customers: 85 },
+  { month: "May", reports: 300, customers: 100 },
+  { month: "Jun", reports: 340, customers: 120 },
+];
+
 const Charts: React.FC = () => {
   const [timeRange] = useState("Last 6 months");
 
@@ -135,26 +263,17 @@ const Charts: React.FC = () => {
     isError,
   } = useGetAdminDashboardHomeOverviewQuery("");
 
-  // API response data
-  const chartData = responseData?.data?.reportTrend || [];
+  //  API data
+  const apiData = responseData?.data?.reportTrend || [];
 
-  //  Loading state
-  if (isLoading) {
-    return (
-      <div className="flex h-[400px] items-center justify-center">
-        <p className="text-gray-500">Loading chart...</p>
-      </div>
-    );
-  }
+  //  Choose data source
+  const chartData = useMemo(() => {
+    // If API has real data → use it
+    if (apiData.length > 0) return apiData;
 
-  //  Error state
-  if (isError) {
-    return (
-      <div className="flex h-[400px] items-center justify-center">
-        <p className="text-red-500">Failed to load chart data</p>
-      </div>
-    );
-  }
+    // Otherwise → demo data
+    return demoData;
+  }, [apiData]);
 
   return (
     <div className="w-full rounded-lg bg-gray-50 p-4 md:p-8">
@@ -169,7 +288,7 @@ const Charts: React.FC = () => {
           </p>
         </div>
 
-        <span className="self-start rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 sm:self-auto">
+        <span className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700">
           {timeRange}
         </span>
       </div>
@@ -177,41 +296,18 @@ const Charts: React.FC = () => {
       {/* Chart */}
       <div className="h-[400px] w-full md:h-[500px]">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart
-            data={chartData}
-            margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
-          >
+          <BarChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-
-            <XAxis
-              dataKey="month"
-              tick={{ fill: "#6b7280", fontSize: 14 }}
-              axisLine={{ stroke: "#d1d5db" }}
-            />
-
-            <YAxis
-              allowDecimals={false}
-              tick={{ fill: "#6b7280", fontSize: 14 }}
-              axisLine={{ stroke: "#d1d5db" }}
-            />
-
-            <Tooltip
-              contentStyle={{
-                backgroundColor: "#ffffff",
-                border: "1px solid #e5e7eb",
-                borderRadius: "8px",
-                padding: "10px",
-              }}
-            />
-
-            <Legend iconType="rect" iconSize={14} />
+            <XAxis dataKey="month" />
+            <YAxis allowDecimals={false} />
+            <Tooltip />
+            <Legend />
 
             <Bar
               dataKey="reports"
               name="Reports"
               fill="#2563eb"
               radius={[6, 6, 0, 0]}
-              maxBarSize={50}
             />
 
             <Bar
@@ -219,11 +315,23 @@ const Charts: React.FC = () => {
               name="Customers"
               fill="#16a34a"
               radius={[6, 6, 0, 0]}
-              maxBarSize={50}
             />
           </BarChart>
         </ResponsiveContainer>
       </div>
+
+      {/* Footer info */}
+      {isLoading && (
+        <p className="mt-4 text-center text-sm text-gray-500">
+          Loading live data...
+        </p>
+      )}
+
+      {isError && (
+        <p className="mt-4 text-center text-sm text-orange-500">
+          Showing demo data (API unavailable)
+        </p>
+      )}
     </div>
   );
 };
