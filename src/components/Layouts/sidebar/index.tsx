@@ -21,6 +21,8 @@ export function Sidebar() {
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
   const [loading, setLoading] = useState<Boolean>(false);
 
+  const domain = window.location.origin;
+
   /** ⭐ Correct nested URL detection */
   const isActiveUrl = (url?: string): boolean => {
     if (!url) return false;
@@ -70,11 +72,6 @@ export function Sidebar() {
     );
   }, [pathname]);
 
-  // const handleLogout = () => {
-  //   if (isMobile) toggleSidebar();
-  //   // router.push("/");
-  // };
-
   const handleLogOut = () => {
     setLoading(true);
     setTimeout(() => {
@@ -83,8 +80,11 @@ export function Sidebar() {
       Cookies.remove("refreshToken");
       Cookies.remove("token");
       toast.success("Logged out successfully");
-      // router.push("http://localhost:3008/signIn");
-      router.push("http://206.162.244.131:3008/signIn");
+      if (domain === "http://localhost:3008") {
+        router.push("http://localhost:3008/signIn");
+      } else {
+        router.push(`${process.env.NEXT_PUBLIC_DOMAIN_URL_ONE}/signIn`);
+      }
       setLoading(false); // 2-second delay
     }, 2000);
   };

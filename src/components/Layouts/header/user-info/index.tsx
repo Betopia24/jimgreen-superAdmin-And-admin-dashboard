@@ -26,6 +26,8 @@ export function UserInfo() {
 
   const userProfile = data?.data as User;
 
+  const domain = window.location.origin;
+
   const USER = {
     name: "John Smith",
     email: "johnson@nextadmin.com",
@@ -40,8 +42,11 @@ export function UserInfo() {
       Cookies.remove("refreshToken");
       Cookies.remove("token");
       toast.success("Logged out successfully");
-      // router.push("http://localhost:3008/signIn");
-      router.push("http://206.162.244.131:3008/signIn");
+      if (domain === "http://localhost:3008") {
+        router.push("http://localhost:3008/signIn");
+      } else {
+        router.push(`${process.env.NEXT_PUBLIC_DOMAIN_URL_ONE}/signIn`);
+      }
       setLoading(false); // 2-second delay
     }, 2000);
   };
