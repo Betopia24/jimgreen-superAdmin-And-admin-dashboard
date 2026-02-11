@@ -10,6 +10,8 @@ import {
   CalendarCheck,
 } from "lucide-react";
 import { Calendar } from "@/components/Layouts/sidebar/icons";
+import { useGetAdminDashboardHomeOverviewQuery } from "@/redux/api/dashboardHomeAdmin/adminDashboardHomeSlicApi";
+import LoadingPage from "@/share/loading/LoadingPage";
 
 interface StatCardProps {
   icon: React.ReactNode;
@@ -47,18 +49,22 @@ const StatCard: React.FC<StatCardProps> = ({
 };
 
 export default function DashboardOverview() {
+  const { data, isLoading } = useGetAdminDashboardHomeOverviewQuery("");
+
+  const allStats = data?.data?.reportStats;
+
   const stats = [
     {
       icon: <ChartLine className="h-6 w-6 text-primary" />,
       title: "Total Analyses",
-      value: "12",
+      value: `${allStats?.totalReports?.value}`,
       change: "+12.5% vs last month",
       iconBgColor: "bg-indigo-100",
     },
     {
       icon: <CalendarCheck className="h-6 w-6 text-primary" />,
       title: "Last 30 Days",
-      value: "40",
+      value: `${allStats?.totalReports?.value}`,
       change: "+24 calculations",
       iconBgColor: "bg-indigo-100",
     },
@@ -66,14 +72,14 @@ export default function DashboardOverview() {
     {
       icon: <Users className="h-6 w-6 text-primary" />,
       title: "Total Users",
-      value: "12,45",
+      value: `${allStats?.monthlyCustomers?.value}`,
       change: "+23 this month",
       iconBgColor: "bg-indigo-100",
     },
     {
       icon: <FileText className="h-6 w-6 text-primary" />,
       title: "Reports Generated",
-      value: "567",
+      value: `${allStats?.totalReports?.value}`,
       change: "+23 this month",
       iconBgColor: "bg-indigo-100",
     },
