@@ -1,4 +1,6 @@
 "use client";
+import { useGetCompanySingleQuery } from "@/redux/api/super-admin/companyManagement/superAdminCompanyManagementSliceApi";
+import LoadingPage from "@/share/loading/LoadingPage";
 import {
   Mail,
   Phone,
@@ -8,6 +10,7 @@ import {
   CreditCard,
   Activity,
 } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface UserProfileProps {
   user?: {
@@ -24,6 +27,12 @@ interface UserProfileProps {
 }
 
 const CompanyDetails: React.FC<UserProfileProps> = ({ user }) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
+
+  const { data, isLoading } = useGetCompanySingleQuery(id);
+  console.log(data);
   const defaultUser = {
     companyName: "TechCorp Industries",
     email: "TechCorp@gmail.com",
@@ -46,6 +55,10 @@ const CompanyDetails: React.FC<UserProfileProps> = ({ user }) => {
   const handleBan = () => {
     console.log("Ban account clicked");
   };
+
+  if (isLoading) {
+    return <LoadingPage />;
+  }
 
   return (
     <div className="min-h-screen">
@@ -100,17 +113,17 @@ const CompanyDetails: React.FC<UserProfileProps> = ({ user }) => {
             {/* Action Buttons */}
             <div className="flex w-full flex-col gap-3 sm:flex-row lg:w-auto">
               <button
-                onClick={handleSuspend}
+                onClick={() => router.back()}
                 className="w-full rounded-lg border border-red-200 bg-white px-4 py-2.5 text-xs font-medium text-red-600 transition-colors hover:bg-red-50 sm:w-auto sm:px-6 sm:text-sm"
               >
-                Suspend User
+                Back to Company List
               </button>
-              <button
+              {/* <button
                 onClick={handleBan}
                 className="w-full rounded-lg bg-red-600 px-4 py-2.5 text-xs font-medium text-white transition-colors hover:bg-red-700 sm:w-auto sm:px-6 sm:text-sm"
               >
                 Ban Account
-              </button>
+              </button> */}
             </div>
           </div>
         </div>
