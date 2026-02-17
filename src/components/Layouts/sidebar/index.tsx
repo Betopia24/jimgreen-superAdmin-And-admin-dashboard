@@ -33,7 +33,8 @@ export function Sidebar() {
     }
 
     // Other routes (nested)
-    return pathname === url || pathname.startsWith(url + "/super-admin");
+    // return pathname === url || pathname.startsWith(url + "/super-admin");
+    return pathname === url || pathname.startsWith(url + "/");
   };
 
   const toggleExpanded = (title: string) => {
@@ -44,20 +45,24 @@ export function Sidebar() {
 
   const role = true;
 
-  let NAV_DATA = [];
-  if (
-    pathname === "/admin" ||
-    pathname === "/admin/team-management" ||
-    pathname === "/admin/subscriptions" ||
-    pathname === "/admin/subscriptions/payment" ||
-    pathname === "/admin/history/" ||
-    pathname === "/admin/history/69940ee069f305d708110442" ||
-    pathname === "/admin/settings"
-  ) {
-    NAV_DATA = NAV_DATA_ADMIN;
-  } else {
-    NAV_DATA = NAV_DATA_SUPER_ADMIN;
-  }
+  // let NAV_DATA = [];
+  // if (
+  //   pathname === "/admin" ||
+  //   pathname === "/admin/team-management" ||
+  //   pathname === "/admin/subscriptions" ||
+  //   pathname === "/admin/subscriptions/payment" ||
+  //   pathname === "/admin/history" ||
+  //   pathname === "/admin/history/69940ee069f305d708110442" ||
+  //   pathname === "/admin/settings"
+  // ) {
+  //   NAV_DATA = NAV_DATA_ADMIN;
+  // } else {
+  //   NAV_DATA = NAV_DATA_SUPER_ADMIN;
+  // }
+
+  let NAV_DATA = pathname.startsWith("/admin")
+    ? NAV_DATA_ADMIN
+    : NAV_DATA_SUPER_ADMIN;
 
   /**  Auto-expand if child matches */
   useEffect(() => {
