@@ -50,8 +50,8 @@ export function Sidebar() {
     pathname === "/admin/team-management" ||
     pathname === "/admin/subscriptions" ||
     pathname === "/admin/subscriptions/payment" ||
-    pathname === "/admin/reports-Analytics" ||
-    pathname === "/admin/reports-Analytics/report-details" ||
+    pathname === "/admin/history/" ||
+    pathname === "/admin/history/69940ee069f305d708110442" ||
     pathname === "/admin/settings"
   ) {
     NAV_DATA = NAV_DATA_ADMIN;

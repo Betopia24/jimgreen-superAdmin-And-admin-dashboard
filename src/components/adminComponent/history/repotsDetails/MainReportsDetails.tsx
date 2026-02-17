@@ -2,26 +2,28 @@
 import { useGetReportHistorySignleQuery } from "@/redux/api/reportAnalysis/reportAnalysisSliceApi";
 // import ReportsDetailsOne from "./ReportsDetailsOne";
 // import TrendAnalysisDashboard from "./ReportsDetailsTow";
-import Loading from "@/components/Others/Loading";
+
 import ShowAllReportDetailsData from "./ShowAllReportDetailsData";
+import LoadingPage from "@/share/loading/LoadingPage";
 
 const MainReportsDetails = ({ historyId }: { historyId: string }) => {
   // console.log("historyid==============", historyId);
-  const { data: reportDetailsData, isLoading } = useGetReportHistorySignleQuery(historyId);
+  const { data: reportDetailsData, isLoading } =
+    useGetReportHistorySignleQuery(historyId);
 
   if (isLoading) {
     return (
       <div>
-        <Loading />
+        <LoadingPage />
       </div>
-    )
+    );
   }
 
   return (
     <div>
       {/* <ReportsDetailsOne />
       <TrendAnalysisDashboard /> */}
-      <ShowAllReportDetailsData reportDetailsData={reportDetailsData}/>
+      <ShowAllReportDetailsData reportDetailsData={reportDetailsData} />
     </div>
   );
 };

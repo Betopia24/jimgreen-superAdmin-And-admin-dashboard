@@ -35,9 +35,9 @@ export const NAV_DATA_ADMIN: NavSection[] = [
       },
 
       {
-        title: "Reports Analytics",
+        title: "Reports history",
         icon: Icons.ChartLineIcon,
-        url: "/admin/reports-Analytics",
+        url: "/admin/history",
         items: [],
       },
 
