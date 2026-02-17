@@ -102,10 +102,11 @@
 import Image from "next/image";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Section } from "../AnalyzedAllviewDatails";
+
 import { useModifyRepordGraphMutation } from "@/redux/api/reportAnalysis/reportAnalysisSliceApi";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import { Section } from "../ShowAllReportDetailsData";
 
 interface Props {
   report: any;
@@ -161,11 +162,11 @@ const GraphSection: React.FC<Props> = ({ report, id }) => {
       title={
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 w-full"
+          className="flex w-full flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"
         >
           <h2 className="text-lg font-semibold">Parameter Comparison Graph</h2>
 
-          <div className="flex w-full lg:w-auto gap-2">
+          <div className="flex w-full gap-2 lg:w-auto">
             <div className="w-full lg:w-80">
               <input
                 type="text"
@@ -173,7 +174,7 @@ const GraphSection: React.FC<Props> = ({ report, id }) => {
                 {...register("prompt", {
                   required: "Prompt is required",
                 })}
-                className={`w-full px-3 font-normal py-3 border text-sm rounded-md focus:outline-none focus:ring-2 ${
+                className={`w-full rounded-md border px-3 py-3 text-sm font-normal focus:outline-none focus:ring-2 ${
                   errors.prompt
                     ? "border-red-500 focus:ring-red-500"
                     : "focus:ring-primary"
@@ -181,7 +182,7 @@ const GraphSection: React.FC<Props> = ({ report, id }) => {
               />
 
               {errors.prompt && (
-                <p className="text-red-500 text-sm mt-1">
+                <p className="mt-1 text-sm text-red-500">
                   {errors.prompt.message}
                 </p>
               )}
@@ -190,7 +191,7 @@ const GraphSection: React.FC<Props> = ({ report, id }) => {
             <button
               type="submit"
               disabled={!isValid || isLoading}
-              className="px-4 py-2 bg-primary text-white rounded-md hover:opacity-90 disabled:opacity-50"
+              className="rounded-md bg-primary px-4 py-2 text-white hover:opacity-90 disabled:opacity-50"
             >
               {isLoading ? "Sending..." : "Send"}
             </button>
@@ -199,10 +200,10 @@ const GraphSection: React.FC<Props> = ({ report, id }) => {
       }
     >
       <div className="w-full">
-        <div className="relative w-full aspect-[16/9] rounded-lg overflow-hidden">
+        <div className="relative aspect-[16/9] w-full overflow-hidden rounded-lg">
           {(isLoading || imageLoading) && (
-            <div className="absolute inset-0 flex items-center justify-center bg-white/60 backdrop-blur-sm z-10">
-              <Loader2 className="animate-spin w-8 h-8 text-primary" />
+            <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/60 backdrop-blur-sm">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
             </div>
           )}
 
