@@ -11,6 +11,7 @@ import {
   Shield,
   Trash2,
   Plus,
+  Loader2,
 } from "lucide-react";
 import Link from "next/link";
 import DeactivateModal from "./Modal";
@@ -270,6 +271,15 @@ const TeamManagement: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 bg-white">
+                {isLoading && (
+                  <tr>
+                    <td colSpan={6} className="py-8">
+                      <div className="flex items-center justify-center">
+                        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                      </div>
+                    </td>
+                  </tr>
+                )}
                 {filteredUsers.map((user: TeamMember) => (
                   <tr
                     key={user.id}
