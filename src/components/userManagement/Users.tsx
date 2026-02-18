@@ -236,9 +236,9 @@ const UserManagement: React.FC = () => {
                   <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
                     Email
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
+                  {/* <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
                     Subscription
-                  </th>
+                  </th> */}
                   <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
                     Created Date
                   </th>
@@ -283,13 +283,13 @@ const UserManagement: React.FC = () => {
                     <td className="whitespace-nowrap px-6 py-4 text-gray-600">
                       {user.email}
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4">
+                    {/* <td className="whitespace-nowrap px-6 py-4">
                       <span
                         className={`rounded-md px-3 py-2 text-xs font-medium ${getSubscriptionColor(user.subscription)}`}
                       >
                         {user.subscription}
                       </span>
-                    </td>
+                    </td> */}
                     <td className="whitespace-nowrap px-6 py-4 text-gray-600">
                       {user.createdDate}
                     </td>
