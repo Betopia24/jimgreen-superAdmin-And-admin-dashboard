@@ -31,7 +31,10 @@ export function Sidebar() {
     if (url === "/admin") {
       return pathname === "/admin";
     }
-
+    // Dashboard exact match only
+    if (url === "/super-admin") {
+      return pathname === "/super-admin";
+    }
     // Other routes (nested)
     // return pathname === url || pathname.startsWith(url + "/super-admin");
     return pathname === url || pathname.startsWith(url + "/");
