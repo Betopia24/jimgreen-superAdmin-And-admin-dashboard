@@ -132,24 +132,25 @@ const UserManagement: React.FC = () => {
   const handleSuspendUser = async (userId: string) => {
     try {
       const response = await accountSuspendPost(userId).unwrap();
+      if (response?.success) {
+        toast.success(response?.message);
+      }
     } catch (error) {
       console.log(error);
     }
   };
 
-  const handleViewDetails = (user: UIUser): void => {
-    setSelectedUser(user);
-    setShowDetailsModal(true);
-    setActiveActionMenu(null);
-  };
-
   const filterOptions: FilterStatus[] = ["All", "Active", "blocked"];
 
   const handleDelete = async () => {
-    console.log(selectedItem);
     try {
       const response = await deleteUserPost(selectedItem).unwrap();
-      console.log(response);
+      if (response?.success) {
+        toast.success(response?.message);
+        if (response?.success) {
+          toast.success(response?.message);
+        }
+      }
     } catch (error) {
       console.error(error);
     }
@@ -342,7 +343,7 @@ const UserManagement: React.FC = () => {
 
                                 <span>Suspend User</span>
                               </button>
-                              <button
+                              {/* <button
                                 onClick={() => {
                                   setSelectedItem(user.id);
                                   setIsDeleteOpen(true);
@@ -351,7 +352,7 @@ const UserManagement: React.FC = () => {
                               >
                                 <Trash2 className="h-4 w-4" />
                                 <span>Delete account</span>
-                              </button>
+                              </button> */}
                             </div>
                           </div>
                         )}
