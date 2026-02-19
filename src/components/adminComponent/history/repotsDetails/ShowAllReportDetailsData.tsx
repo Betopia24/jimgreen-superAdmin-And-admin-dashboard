@@ -15,6 +15,9 @@ import { useSelector } from "react-redux";
 
 import { format } from "date-fns";
 import ScoreCard from "./detailsComonents/ScoreCard";
+import PageHeader from "@/share/PageHeader";
+import Link from "next/link";
+import { ArrowBigLeft, ArrowBigRight, BackpackIcon } from "lucide-react";
 
 const badge = (status: string) => {
   const s = status?.toLowerCase();
@@ -132,6 +135,21 @@ const ShowAllReportDetailsData = ({
     <div className="space-y-6">
       {/* GRAPH */}
       {/* <GraphSection report={report} id={analysisViewData.id} /> */}
+      {/* heading part  */}
+      <div className="flex items-center justify-between">
+        <PageHeader
+          title="The History view Details"
+          description="Interactive visualization of water quality parameters"
+        />
+        <Link href={`/admin/history`}>
+          <button
+            type="submit"
+            className="flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 font-medium text-[#FFFFFF] transition-colors hover:bg-blue-900"
+          >
+            <ArrowBigLeft /> <span>Back to history </span>
+          </button>
+        </Link>
+      </div>
 
       <div className="relative aspect-[16/9] w-full overflow-auto rounded-lg border bg-white">
         <Image
