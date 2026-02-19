@@ -1,3 +1,4 @@
+import { useGetAdminDashboardHomeOverviewQuery } from "@/redux/api/dashboardHomeAdmin/adminDashboardHomeSlicApi";
 import { CircleCheckBig, Users } from "lucide-react";
 import React from "react";
 
@@ -10,49 +11,40 @@ interface Activity {
   bgColor: string;
 }
 
+interface RecentReport {
+  id: string;
+  reportId: string;
+  customer: string;
+  type: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 const RecentActivity: React.FC = () => {
-  const activities: Activity[] = [
-    {
-      id: 1,
-      name: "Cameron Williamson",
-      action: "Upgraded to Pro",
-      time: "2m ago",
-      avatar: "CW",
-      bgColor: "bg-blue-500",
-    },
-    {
-      id: 2,
-      name: "Darrell Steward",
-      action: "New signup",
-      time: "15m ago",
-      avatar: "DS",
-      bgColor: "bg-pink-500",
-    },
-    {
-      id: 3,
-      name: "Guy Hawkins",
-      action: "Cancelled subscription",
-      time: "1h ago",
-      avatar: "GH",
-      bgColor: "bg-teal-500",
-    },
-    {
-      id: 4,
-      name: "Leslie Alexander",
-      action: "Upgraded to Enterprise",
-      time: "2m ago",
-      avatar: "LA",
-      bgColor: "bg-orange-500",
-    },
-    {
-      id: 5,
-      name: "Arlene McCoy",
-      action: "New signup",
-      time: "3h ago",
-      avatar: "AM",
-      bgColor: "bg-indigo-500",
-    },
-  ];
+  const { data, isLoading } = useGetAdminDashboardHomeOverviewQuery("");
+
+  const allRecentData: RecentReport[] = data?.data?.recentReports;
+
+  // Helper function for time format
+  const formatTimeAgo = (dateString: string) => {
+    const now = new Date();
+    const created = new Date(dateString);
+    const diffInSeconds = Math.floor(
+      (now.getTime() - created.getTime()) / 1000,
+    );
+
+    if (diffInSeconds < 60) return `${diffInSeconds}s ago`;
+
+    const diffInMinutes = Math.floor(diffInSeconds / 60);
+    if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
+
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    if (diffInHours < 24) return `${diffInHours}h ago`;
+
+    const diffInDays = Math.floor(diffInHours / 24);
+    return `${diffInDays}d ago`;
+  };
 
   return (
     <div className="rounded-2xl bg-white p-6 shadow-md">
@@ -67,9 +59,9 @@ const RecentActivity: React.FC = () => {
 
           {/* Activity List */}
           <div className="mt-7 rounded-xl border py-6">
-            {activities.map((activity) => (
+            {allRecentData.map((report) => (
               <div
-                key={activity.id}
+                key={report.id}
                 className="cursor-pointer px-4 py-3 transition-colors duration-150 hover:bg-gray-50 sm:px-6 lg:px-8"
               >
                 <div className="flex items-center justify-between gap-4">
@@ -90,10 +82,10 @@ const RecentActivity: React.FC = () => {
                     {/* Name and Action */}
                     <div className="min-w-0 flex-1">
                       <h3 className="truncate text-sm font-semibold text-gray-900 sm:text-base">
-                        {activity.name}
+                        {report.reportId}
                       </h3>
                       <p className="truncate text-xs text-gray-500 sm:text-sm">
-                        {activity.action}
+                        {report.type}
                       </p>
                     </div>
                   </div>
@@ -101,7 +93,7 @@ const RecentActivity: React.FC = () => {
                   {/* Right side: Time */}
                   <div className="flex-shrink-0">
                     <span className="whitespace-nowrap text-xs font-medium text-gray-400 sm:text-sm">
-                      {activity.time}
+                      {formatTimeAgo(report.createdAt)}
                     </span>
                   </div>
                 </div>
