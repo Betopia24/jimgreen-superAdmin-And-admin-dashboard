@@ -80,12 +80,14 @@ export default function AddMemberForm() {
 
     const payload = {
       ...data,
+      role: "user",
     };
     console.log(" payloadForm Data: ", payload);
 
     try {
       const response = await createMemner({
         id: userProfile?.companyMember?.companyId,
+
         payload,
       }).unwrap();
       console.log(response);
@@ -279,7 +281,7 @@ export default function AddMemberForm() {
             </div>
 
             {/* Role Dropdown */}
-            <div>
+            {/* <div>
               <label
                 htmlFor="role"
                 className="mb-2 block text-sm font-medium text-gray-700"
@@ -298,7 +300,7 @@ export default function AddMemberForm() {
                   <ChevronDown className="h-5 w-5 text-gray-400" />
                 </div>
               </div>
-            </div>
+            </div> */}
 
             {/* Submit Button */}
             <div className="flex justify-end gap-5 pt-4">

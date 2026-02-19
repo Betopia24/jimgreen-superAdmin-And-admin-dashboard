@@ -453,13 +453,18 @@ export default function NewPlan() {
 
   const [newFeatureName, setNewFeatureName] = useState("");
   const features = watch("features");
+  const [error, setError] = useState("");
 
   const [createPlanPost, { isLoading }] = useCreateSubscriptionPanMutation();
 
   const handleAddFeature = () => {
-    if (newFeatureName.trim() === "") return;
+    if (!newFeatureName.trim()) {
+      setError("Feature name is required");
+      return;
+    }
 
     setValue("features", [...features, newFeatureName.trim()]);
+    setError("");
     setNewFeatureName("");
   };
 
@@ -680,23 +685,40 @@ export default function NewPlan() {
             <h3 className="text-sm font-medium text-gray-700">Features</h3>
 
             {/* Add New Feature Input */}
-            <div className="flex gap-2">
-              <input
-                type="text"
-                value={newFeatureName}
-                onChange={(e) => setNewFeatureName(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="Enter new feature name"
-                className="flex-1 rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <button
-                type="button"
-                onClick={handleAddFeature}
-                className="flex items-center gap-2 rounded-md bg-blue-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-600"
-              >
-                <Plus className="h-4 w-4" />
-                Add
-              </button>
+            <div className="flex flex-col gap-1">
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={newFeatureName}
+                  onChange={(e) => {
+                    setNewFeatureName(e.target.value);
+                    if (error) setError(""); // clear error while typing
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleAddFeature();
+                    }
+                  }}
+                  placeholder="Enter new feature name"
+                  className={`flex-1 rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2 ${
+                    error
+                      ? "border-red-400 bg-red-50 focus:ring-red-400"
+                      : "border-gray-200 bg-gray-50 focus:ring-blue-500"
+                  }`}
+                />
+
+                <button
+                  type="button"
+                  onClick={handleAddFeature}
+                  className="flex items-center gap-2 rounded-md bg-blue-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-600"
+                >
+                  <Plus className="h-4 w-4" />
+                  Add
+                </button>
+              </div>
+
+              {/* ✅ Error Message */}
+              {error && <p className="text-xs text-red-500">{error}</p>}
             </div>
 
             {/* Feature List */}
