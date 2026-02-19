@@ -1,7 +1,14 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { Search, Eye, ChevronLeft, ChevronRight, Filter } from "lucide-react";
+import {
+  Search,
+  Eye,
+  ChevronLeft,
+  ChevronRight,
+  Filter,
+  ArrowBigLeft,
+} from "lucide-react";
 import { IoIosGitCompare } from "react-icons/io";
 import Link from "next/link";
 import { useGetReportHistoryQuery } from "@/redux/api/reportAnalysis/reportAnalysisSliceApi";
@@ -60,7 +67,13 @@ export default function HistoryTable() {
   }
 
   return (
-    <div className="bg-gray-50 py-6">
+    <div className="py-6">
+      <div className="mb-5 flex items-center justify-between">
+        <PageHeader
+          title="The All History "
+          description="Interactive visualization of water quality parameters"
+        />
+      </div>
       <div className="mb-6 rounded-xl bg-white p-4 hover:shadow-sm sm:p-6">
         <div className="flex flex-col gap-4 md:flex-row lg:items-center lg:justify-between">
           {/* Search Input */}
