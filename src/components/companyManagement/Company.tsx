@@ -753,7 +753,7 @@ const CompanyManagement: React.FC = () => {
                               <span>Suspend User</span>
                             </button>
 
-                            <button
+                            {/* <button
                               onClick={() => {
                                 setSelectedItem(user.id);
                                 setIsDeleteOpen(true);
@@ -762,7 +762,7 @@ const CompanyManagement: React.FC = () => {
                             >
                               <Trash2 size={20} />
                               <span>Delete</span>
-                            </button>
+                            </button> */}
                           </div>
                         </div>
                       )}
