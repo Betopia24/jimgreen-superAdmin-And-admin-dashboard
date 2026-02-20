@@ -9,8 +9,12 @@ import {
   Clock,
   CreditCard,
   Activity,
+  User2,
+  Box,
+  Magnet,
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
+import moment from "moment";
 
 interface UserProfileProps {
   user?: {
@@ -46,7 +50,7 @@ const CompanyDetails: React.FC<UserProfileProps> = ({ user }) => {
     status: "active" as const,
   };
 
-  const userData = user || defaultUser;
+  const userData = data?.data || defaultUser;
 
   const handleSuspend = () => {
     console.log("Suspend user clicked");
@@ -70,8 +74,11 @@ const CompanyDetails: React.FC<UserProfileProps> = ({ user }) => {
               {/* Avatar */}
               <div className="relative flex-shrink-0">
                 <img
-                  src={userData.avatar}
-                  alt={userData.companyName}
+                  src={
+                    userData.avatar ||
+                    "https://img.freepik.com/premium-vector/creative-elegant-abstract-minimalistic-logo-design-vector-any-brand-company_1253202-136451.jpg?semt=ais_hybrid&w=740&q=80"
+                  }
+                  alt={userData.name}
                   className="h-28 w-28 rounded-full border-2 border-blue-100 object-cover sm:h-32 sm:w-32 lg:h-40 lg:w-40"
                 />
                 <div
@@ -86,7 +93,7 @@ const CompanyDetails: React.FC<UserProfileProps> = ({ user }) => {
               {/* User Info */}
               <div className="w-full space-y-3 text-center sm:w-auto sm:text-left">
                 <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">
-                  {userData.companyName}
+                  {userData.name}
                 </h1>
 
                 <div className="space-y-2">
@@ -98,7 +105,9 @@ const CompanyDetails: React.FC<UserProfileProps> = ({ user }) => {
                   </div>
                   <div className="flex items-center justify-center gap-2 text-gray-600 sm:justify-start">
                     <Phone className="h-4 w-4 flex-shrink-0" />
-                    <span className="text-xs sm:text-sm">{userData.phone}</span>
+                    <span className="text-xs sm:text-sm">
+                      {userData.phone || "N/A"}
+                    </span>
                   </div>
                   <div className="flex items-center justify-center gap-2 text-gray-600 sm:justify-start">
                     <MapPin className="h-4 w-4 flex-shrink-0" />
@@ -141,7 +150,7 @@ const CompanyDetails: React.FC<UserProfileProps> = ({ user }) => {
               </span>
             </div>
             <p className="ml-10 text-lg font-semibold text-primary sm:ml-11 sm:text-2xl">
-              {userData.createdDate}
+              {moment(userData.createdAt).format("MMM Do YY")}
             </p>
           </div>
 
@@ -156,7 +165,7 @@ const CompanyDetails: React.FC<UserProfileProps> = ({ user }) => {
               </span>
             </div>
             <p className="ml-10 text-lg font-semibold text-primary sm:ml-11 sm:text-2xl">
-              {userData.users}
+              {userData._count.companyMembers}
             </p>
           </div>
 
@@ -171,7 +180,7 @@ const CompanyDetails: React.FC<UserProfileProps> = ({ user }) => {
               </span>
             </div>
             <p className="ml-10 text-lg font-semibold text-primary sm:ml-11 sm:text-2xl">
-              {userData.subscription}
+              {userData.subscriptions[0].planSnapshot.name}
             </p>
           </div>
 
@@ -186,7 +195,47 @@ const CompanyDetails: React.FC<UserProfileProps> = ({ user }) => {
               </span>
             </div>
             <p className="ml-10 text-lg font-semibold capitalize text-green-600 sm:ml-11 sm:text-2xl">
-              {userData.status}
+              {userData.subscriptions[0].status}
+            </p>
+          </div>
+
+          <div className="rounded-xl bg-white p-4 shadow-sm sm:rounded-2xl sm:p-6">
+            <div className="mb-2 flex items-center gap-3">
+              <div className="flex-shrink-0 rounded-lg bg-blue-50 p-2">
+                <Magnet className="h-4 w-4 text-primary sm:h-5 sm:w-5" />
+              </div>
+              <span className="text-xs font-medium text-gray-500 sm:text-sm">
+                Row Materials
+              </span>
+            </div>
+            <p className="ml-10 text-lg font-semibold text-primary sm:ml-11 sm:text-2xl">
+              {userData._count.rawMaterials}
+            </p>
+          </div>
+          <div className="rounded-xl bg-white p-4 shadow-sm sm:rounded-2xl sm:p-6">
+            <div className="mb-2 flex items-center gap-3">
+              <div className="flex-shrink-0 rounded-lg bg-blue-50 p-2">
+                <Box className="h-4 w-4 text-primary sm:h-5 sm:w-5" />
+              </div>
+              <span className="text-xs font-medium text-gray-500 sm:text-sm">
+                Products
+              </span>
+            </div>
+            <p className="ml-10 text-lg font-semibold text-primary sm:ml-11 sm:text-2xl">
+              {userData._count.products}
+            </p>
+          </div>
+          <div className="rounded-xl bg-white p-4 shadow-sm sm:rounded-2xl sm:p-6">
+            <div className="mb-2 flex items-center gap-3">
+              <div className="flex-shrink-0 rounded-lg bg-blue-50 p-2">
+                <User2 className="h-4 w-4 text-primary sm:h-5 sm:w-5" />
+              </div>
+              <span className="text-xs font-medium text-gray-500 sm:text-sm">
+                Customers
+              </span>
+            </div>
+            <p className="ml-10 text-lg font-semibold text-primary sm:ml-11 sm:text-2xl">
+              {userData._count.customers}
             </p>
           </div>
         </div>
