@@ -28,7 +28,7 @@ export default function HistoryTable() {
 
   const { data: userData } = useGetMeProfileQuery("");
   const profile = userData?.data as User;
-  const companyId = profile?.companyMember?.companyId;
+  const companyId = profile?.companyMember?.company?.id;
   // console.log("companyId==============", companyId);
 
   const { data: reportHistoryData, isLoading } = useGetReportHistoryQuery(
