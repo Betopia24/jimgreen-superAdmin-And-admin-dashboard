@@ -40,24 +40,47 @@ export interface User {
   lastName: string;
   email: string;
   avatar: string | null;
+  provider: "EMAIL" | string;
   isEmailVerified: boolean;
-  role: "USER";
-  status: "UNBLOCK";
-  createdAt: string; // ISO date string
-  updatedAt: string; // ISO date string
-  companyMember: {
-    role: "owner";
-    companyId: string;
-    status: "active";
-  };
+  role: "USER" | "ADMIN" | string;
+  status: "UNBLOCK" | "BLOCK" | string;
+  createdAt: string;
+  updatedAt: string;
+  companyMember: CompanyMember;
+  activeSubscription: ActiveSubscription;
 }
 
 export interface CompanyMember {
-  role: "owner" | "member";
-  status: "active" | "inactive";
-  companyId: string;
+  role: "member" | "admin" | string;
+  company: Company;
+  status: "active" | "inactive" | string;
 }
 
+export interface Company {
+  id: string;
+  name: string;
+  email: string;
+  isActive: boolean;
+}
+
+export interface ActiveSubscription {
+  id: string;
+  status: "active" | "inactive" | string;
+  startDate: string;
+  endDate: string;
+  canceledAt: string | null;
+  planSnapshot: PlanSnapshot;
+  remainingReportGeneration: number;
+  remainingAccountAddition: number;
+}
+
+export interface PlanSnapshot {
+  name: string;
+  price: number;
+  maxReports: number;
+  maxAccounts: number;
+  features: string[];
+}
 export interface TeamMember {
   id: string;
   firstName: string;
@@ -85,7 +108,9 @@ const TeamManagement: React.FC = () => {
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
 
   const userProfile = data?.data as User;
-  const id = userProfile?.companyMember?.companyId;
+  console.log("yes");
+  const id = userProfile?.companyMember?.company.id;
+  console.log("id", id);
   const [deleteMember, { isLoading: DeleteLoading }] =
     useDeleteTeamMemberMutation();
   const [statsUpdate, { isLoading: StatsLoading }] =
@@ -103,15 +128,10 @@ const TeamManagement: React.FC = () => {
     );
   });
 
-  const getStatusColor = (status: "active" | "inactive"): string => {
-    switch (status) {
-      case "active":
-        return "bg-green-100 text-green-700";
-      case "inactive":
-        return "bg-gray-100 text-gray-700";
-      default:
-        return "bg-gray-100 text-gray-700";
-    }
+  const getStatusColor = (status: "active" | "inactive") => {
+    return status === "active"
+      ? "bg-green-100 text-green-700"
+      : "bg-gray-100 text-gray-700";
   };
 
   const handleViewDetails = (user: User): void => {
