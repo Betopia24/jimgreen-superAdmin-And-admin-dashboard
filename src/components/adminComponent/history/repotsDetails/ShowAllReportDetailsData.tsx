@@ -130,6 +130,7 @@ const ShowAllReportDetailsData = ({
 }) => {
   // const report = data?.data.waterReport;
   const report = reportDetailsData?.data?.waterReport;
+  console.log(reportDetailsData?.data?.waterReport?.parameter_graph?.graph_url);
 
   return (
     <div className="space-y-6">
