@@ -16,6 +16,7 @@ import { useGetMeProfileQuery } from "@/redux/api/getMe/getMeApi";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import LoadingPage from "@/share/loading/LoadingPage";
+import { User as Users } from "../TeamMember";
 
 interface AddUserFormData {
   firstName: string;
@@ -30,24 +31,6 @@ export type Error = {
     message: string;
   };
 };
-
-export interface User {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  avatar: string | null;
-  isEmailVerified: boolean;
-  role: "USER";
-  status: "UNBLOCK";
-  createdAt: string; // ISO date string
-  updatedAt: string; // ISO date string
-  companyMember: {
-    role: "owner";
-    companyId: string;
-    status: "active";
-  };
-}
 
 export default function AddMemberForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -70,10 +53,9 @@ export default function AddMemberForm() {
     },
   });
 
-  const userProfile = data?.data as User;
+  const userProfile = data?.data as Users;
   const onSubmit = async (data: any) => {
-    console.log(userProfile?.companyMember?.companyId);
-    if (!userProfile?.companyMember?.companyId) {
+    if (!userProfile?.companyMember?.company.id) {
       console.error("Company ID is missing");
       return;
     }
@@ -86,7 +68,7 @@ export default function AddMemberForm() {
 
     try {
       const response = await createMemner({
-        id: userProfile?.companyMember?.companyId,
+        id: userProfile?.companyMember?.company.id,
 
         payload,
       }).unwrap();

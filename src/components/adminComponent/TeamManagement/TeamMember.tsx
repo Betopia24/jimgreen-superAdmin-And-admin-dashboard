@@ -128,7 +128,7 @@ const TeamManagement: React.FC = () => {
     );
   });
 
-  const getStatusColor = (status: "active" | "inactive") => {
+  const getStatusColor = (status: "active" | "inactive" | string) => {
     return status === "active"
       ? "bg-green-100 text-green-700"
       : "bg-gray-100 text-gray-700";
