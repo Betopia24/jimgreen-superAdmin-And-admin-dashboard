@@ -61,7 +61,7 @@ export const analysisApi = baseApi.injectEndpoints({
         page?: number;
         limit?: number;
       }) => ({
-        url: `/report-analysis/history/${companyId}`,
+        url: `/report-analysis/water-reports?companyId=${companyId}`,
         method: "GET",
         params: {
           searchTerm,
