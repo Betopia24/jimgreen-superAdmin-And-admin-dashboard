@@ -59,7 +59,7 @@ const RecentActivity: React.FC = () => {
 
           {/* Activity List */}
           <div className="mt-7 rounded-xl border py-6">
-            {allRecentData.map((report) => (
+            {allRecentData?.map((report) => (
               <div
                 key={report.id}
                 className="cursor-pointer px-4 py-3 transition-colors duration-150 hover:bg-gray-50 sm:px-6 lg:px-8"

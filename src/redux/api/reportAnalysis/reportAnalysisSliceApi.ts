@@ -61,7 +61,7 @@ export const analysisApi = baseApi.injectEndpoints({
         page?: number;
         limit?: number;
       }) => ({
-        url: `/report-analysis/history/${companyId}`,
+        url: `/report-analysis/water-reports?companyId=${companyId}`,
         method: "GET",
         params: {
           searchTerm,
@@ -74,7 +74,7 @@ export const analysisApi = baseApi.injectEndpoints({
     // get report history signle data
     getReportHistorySignle: builder.query({
       query: (id) => ({
-        url: `/report-analysis/report/${id}`,
+        url: `/report-analysis/water-reports/${id}`,
         method: "GET",
       }),
     }),

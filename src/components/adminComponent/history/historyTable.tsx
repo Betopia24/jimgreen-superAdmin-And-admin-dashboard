@@ -121,10 +121,10 @@ export default function HistoryTable() {
                   Date
                 </th>
                 <th className="px-6 py-4 text-left text-sm font-medium text-gray-700">
-                  Score
+                  Asset Name
                 </th>
                 <th className="px-6 py-4 text-left text-sm font-medium text-gray-700">
-                  Rating
+                  Company Name
                 </th>
                 <th className="px-6 py-4 text-left text-sm font-medium text-gray-700">
                   Action
@@ -145,7 +145,7 @@ export default function HistoryTable() {
                     className="border-b border-gray-200 transition-colors hover:bg-gray-50"
                   >
                     <td className="px-6 py-4 text-sm font-medium text-blue-600">
-                      {report?.report_id}
+                      {report?.aiReportId}
                     </td>
                     <td className="px-6 py-4 text-sm font-medium text-gray-900">
                       {report?.customerName}
@@ -160,7 +160,7 @@ export default function HistoryTable() {
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <span className="text-sm font-semibold text-gray-900">
-                          {report?.total_score?.overall_score}
+                          {report?.assetName}
                         </span>
                         {/* <span
                                                     className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${getRiskBadgeColor(
@@ -172,7 +172,7 @@ export default function HistoryTable() {
                       </div>
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-600">
-                      {report?.total_score?.rating}
+                      {report?.companyName}
                     </td>
                     <td className="px-6 py-4">
                       <Link href={`/admin/history/${report?.id}`}>
