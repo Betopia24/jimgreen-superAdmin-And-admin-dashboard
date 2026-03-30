@@ -27,6 +27,10 @@ const nextConfig = {
         hostname: "water-analysis.s3.eu-north-1.amazonaws.com",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "water-analysis.s3.amazonaws.com",
+      },
     ],
   },
 };
