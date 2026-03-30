@@ -23,7 +23,7 @@ const MainReportsDetails = ({ historyId }: { historyId: string }) => {
     <div>
       {/* <ReportsDetailsOne />
       <TrendAnalysisDashboard /> */}
-      <ShowAllReportDetailsData reportDetailsData={reportDetailsData} />
+      <ShowAllReportDetailsData />
     </div>
   );
 };
